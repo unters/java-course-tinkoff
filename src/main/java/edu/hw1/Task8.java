@@ -1,10 +1,14 @@
 package edu.hw1;
 
 public class Task8 {
-    private static final int[][] moves = {
+    private Task8() {
+    }
+
+    private static final int[][] MOVES = {
         {-2, 1}, {-1, 2}, {1, 2}, {2, 1}, {2, -1}, {1, -2}, {-1, -2}, {-2, -1}
     };
 
+    @SuppressWarnings("MagicNumber")
     public static boolean knightBoardCapture(int[][] board) {
         if (board.length != 8) {
             throw new IllegalArgumentException("board should have exactly 8 rows.");
@@ -26,11 +30,12 @@ public class Task8 {
                     throw new IllegalArgumentException("board cannot contain any values except for 0 and 1.");
                 }
 
-                for (int[] move : moves) {
-                    int y_ = y + move[0];
-                    int x_ = x + move[1];
-                    if (y_ >= 0 && y_ < 8 && x_ >= 0 && x_ < 8 && board[y_][x_] == 1)
+                for (int[] move : MOVES) {
+                    int yNew = y + move[0];
+                    int xNew = x + move[1];
+                    if (yNew >= 0 && yNew < 8 && xNew >= 0 && xNew < 8 && board[yNew][xNew] == 1) {
                         return false;
+                    }
                 }
             }
         }

@@ -3,8 +3,12 @@ package edu.hw1;
 import java.util.Arrays;
 
 public class Task6 {
+    private Task6() {
+    }
+
     private final static long K = 6174;
 
+    @SuppressWarnings("MagicNumber")
     public static int countK(long value) {
         /* value must be strictly greater than 1000.  */
         if (value <= 1000) {
@@ -32,15 +36,17 @@ public class Task6 {
         return countKRecursive(value);
     }
 
+    @SuppressWarnings("MagicNumber")
     private static int countKRecursive(long value) {
         char[] digits = Long.toString(value).toCharArray();
         Arrays.sort(digits);
         int n = digits.length;
 
-        long a = 0, b = 0;
+        long a = 0;
+        long b = 0;
         for (int i = 0; i < n; ++i) {
-            a += (long)(digits[i] - '0') * (long)Math.pow(10, n - 1 - i);
-            b += (long)(digits[n - 1 - i] - '0') * (long)Math.pow(10, n - 1 - i);
+            a += (long) (digits[i] - '0') * (long) Math.pow(10, n - 1 - i);
+            b += (long) (digits[n - 1 - i] - '0') * (long) Math.pow(10, n - 1 - i);
         }
 
         return (b - a == K) ? 1 : countKRecursive(b - a) + 1;

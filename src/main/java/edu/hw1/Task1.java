@@ -3,12 +3,17 @@ package edu.hw1;
 import java.math.BigInteger;
 
 public class Task1 {
+    private Task1() {
+    }
+
+    @SuppressWarnings({"MagicNumber", "ReturnCount"})
     public static BigInteger minutesToSeconds(String s) {
-        if (s == null)
+        if (s == null) {
             return new BigInteger("-1");
+        }
 
         int delimiterIndex = s.indexOf(':');
-        /* If no ore multiple delimiters exist - return -1.  */
+        /* If no or multiple delimiters exist - return -1.  */
         if (delimiterIndex == -1 || delimiterIndex != s.lastIndexOf(':')) {
             return new BigInteger("-1");
         }

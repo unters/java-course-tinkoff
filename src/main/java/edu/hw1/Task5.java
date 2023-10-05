@@ -1,6 +1,9 @@
 package edu.hw1;
 
 public class Task5 {
+    private Task5() {
+    }
+
     /* Let's assume that we can build descendant value only for string with even size.  */
     public static boolean isPalindromeDescendant(int value) {
         if (value < 0) {
