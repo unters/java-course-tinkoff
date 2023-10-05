@@ -1,12 +1,11 @@
 package edu.hw1;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import java.math.BigInteger;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task3Test {
-    @Test void isNestable_OneOrBothArgumentsAreNull_ReturnFalse() {
+    @Test void isNestable_OneOrBothArgumentsAreNull_ThrowIllegalArgumentException() {
         int[][] inputA = {{1, 2, 3}, null, null};
         int[][] inputB = {null, {1, 2, 3}, null};
         for (int i = 0; i < inputA.length; ++i) {
@@ -15,10 +14,12 @@ public class Task3Test {
             int[] b = inputB[i];
 
             // when
-            boolean actualAnswer = Task3.isNestable(a, b);
+            Exception e = assertThrows(IllegalArgumentException.class, () -> {
+                Task3.isNestable(a, b);
+            });
 
             // then
-            assertThat(actualAnswer).isEqualTo(false);
+            assertThat(e.getMessage()).contains("cannot be null");
         }
     }
 

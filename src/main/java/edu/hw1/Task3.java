@@ -6,7 +6,7 @@ import static java.lang.Math.max;
 public class Task3 {
     public static boolean isNestable(int[] a, int[] b) {
         if (b == null || a == null) {
-            return false;
+            throw new IllegalArgumentException("Input arrays cannot be null.");
         }
 
         if (a.length == 0 || b.length == 0) {

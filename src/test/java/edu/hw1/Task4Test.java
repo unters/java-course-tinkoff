@@ -1,11 +1,23 @@
 package edu.hw1;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import java.math.BigInteger;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task4Test {
+    @Test void fixString_InputStringIsNull_ThrowException() {
+        // given
+        String s = null;
+
+        // when
+        Exception e = assertThrows(IllegalArgumentException.class, () -> {
+            Task4.fixString(s);
+        });
+
+        // then
+        assertThat(e.getMessage()).contains("cannot be null");
+    }
+
     @Test void fixString_InputStringIsEmpty_ReturnEmptyString() {
         // given
         String s = "";
