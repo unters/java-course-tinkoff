@@ -34,6 +34,20 @@ public class Task1Test {
         }
     }
 
+    @Test void minutesToSeconds_InputContainsLessThanTwoCharactersBeforeTheDelimiter_ReturnMinusOne() {
+        // given
+        String[] inputStrings = {"1:00", "7:32"};
+
+        BigInteger expectedAnswer = new BigInteger("-1");
+        for (String s : inputStrings) {
+            // when
+            BigInteger actualAnswer = Task1.minutesToSeconds(s);
+
+            // then
+            assertThat(actualAnswer).isEqualTo(expectedAnswer);
+        }
+    }
+
     @Test void minutesToSeconds_InputContainsNotTwoCharactersAfterColon_ReturnMinusOne() {
         // given
         String[] inputStrings = {"123:0", "246:9", "789:010", "456:101"};

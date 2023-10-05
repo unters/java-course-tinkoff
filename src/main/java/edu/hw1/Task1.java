@@ -23,8 +23,8 @@ public class Task1 {
             return new BigInteger("-1");
         }
 
-        /* There must be exactly 2 characters after the delimiter.  */
-        if (s.length() - delimiterIndex != 3) {
+        /* There must be at least two charactes before the delimiter and exactly 2 characters after the delimiter.  */
+        if (delimiterIndex < 2 || s.length() - delimiterIndex != 3) {
             return new BigInteger("-1");
         }
 
