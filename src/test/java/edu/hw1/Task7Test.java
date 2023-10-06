@@ -4,18 +4,21 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class Task7Test {
+    private static final int L_BIT = 0b10000000000000000000000000000000;
+    private static final int R_BIT = 0b00000000000000000000000000000001;
+
     @Test void rotateLeft_ShiftIsNegative_ReturnResultOfRightRotation() {
-        byte[] inputN = {(byte) 0b10000000, (byte) 0b10000000, (byte) 0b00000001, (byte) 0b00001001};
-        int[] inputShift = {-1, -8, -7, -3};
-        byte[] expectedAnswers = {(byte) 0b01000000, (byte) 0b10000000, (byte) 0b00000010, (byte) 0b00100001};
+        int[] inputN = {L_BIT, 557056, R_BIT};
+        int[] inputShift = {-1, -40, -7};
+        int[] expectedAnswers = {1073741824, 2176, 33554432};
         for (int i = 0; i < inputN.length; ++i) {
             // given
-            byte n = inputN[i];
+            int n = inputN[i];
             int shift = inputShift[i];
-            byte expectedAnswer = expectedAnswers[i];
+            int expectedAnswer = expectedAnswers[i];
 
             // when
-            byte actualAnswer = Task7.rotateLeft(n, shift);
+            int actualAnswer = Task7.rotateLeft(n, shift);
 
             // then
             assertThat(actualAnswer).isEqualTo(expectedAnswer);
@@ -23,17 +26,17 @@ public class Task7Test {
     }
 
     @Test void rotateRight_ShiftIsNegative_ReturnResultOfLeftRotation() {
-        byte[] inputN = {(byte) 0b10000000, (byte) 0b10000000, (byte) 0b00000001, (byte) 0b00001001};
-        int[] inputShift = {-1, -8, -7, -3};
-        byte[] expectedAnswers = {(byte) 0b00000001, (byte) 0b10000000, (byte) 0b10000000, (byte) 0b01001000};
+        int[] inputN = {1073741824, 2176, 33554432};
+        int[] inputShift = {-1, -40, -7};
+        int[] expectedAnswers = {L_BIT, 557056, R_BIT};
         for (int i = 0; i < inputN.length; ++i) {
             // given
-            byte n = inputN[i];
+            int n = inputN[i];
             int shift = inputShift[i];
-            byte expectedAnswer = expectedAnswers[i];
+            int expectedAnswer = expectedAnswers[i];
 
             // when
-            byte actualAnswer = Task7.rotateRight(n, shift);
+            int actualAnswer = Task7.rotateRight(n, shift);
 
             // then
             assertThat(actualAnswer).isEqualTo(expectedAnswer);
@@ -41,17 +44,17 @@ public class Task7Test {
     }
 
     @Test void rotateLeft_ShiftIsNonNegative_ReturnExpectedAnswer() {
-        byte[] inputN = {(byte) 0b10000000, (byte) 0b10000000, (byte) 0b00000001, (byte) 0b00001001, 0};
-        int[] inputShift = {1, 8, 7, 3, 5};
-        byte[] expectedAnswers = {(byte) 0b00000001, (byte) 0b10000000, (byte) 0b10000000, (byte) 0b01001000, 0};
+        int[] inputN = {1073741824, 2176, 33554432};
+        int[] inputShift = {1, 40, 7};
+        int[] expectedAnswers = {L_BIT, 557056, R_BIT};
         for (int i = 0; i < inputN.length; ++i) {
             // given
-            byte n = inputN[i];
+            int n = inputN[i];
             int shift = inputShift[i];
-            byte expectedAnswer = expectedAnswers[i];
+            int expectedAnswer = expectedAnswers[i];
 
             // when
-            byte actualAnswer = Task7.rotateLeft(n, shift);
+            int actualAnswer = Task7.rotateLeft(n, shift);
 
             // then
             assertThat(actualAnswer).isEqualTo(expectedAnswer);
@@ -59,17 +62,17 @@ public class Task7Test {
     }
 
     @Test void rotateRight_ShiftIsNonNegative_ReturnExpectedAnswer() {
-        byte[] inputN = {(byte) 0b00000001, (byte) 0b10000000, (byte) 0b10000000, (byte) 0b01001000, 0};
-        int[] inputShift = {1, 8, 7, 3, 5};
-        byte[] expectedAnswers = {(byte) 0b10000000, (byte) 0b10000000, (byte) 0b00000001, (byte) 0b00001001, 0};
+        int[] inputN = {L_BIT, 557056, R_BIT};
+        int[] inputShift = {1, 40, 7};
+        int[] expectedAnswers = {1073741824, 2176, 33554432};
         for (int i = 0; i < inputN.length; ++i) {
             // given
-            byte n = inputN[i];
+            int n = inputN[i];
             int shift = inputShift[i];
-            byte expectedAnswer = expectedAnswers[i];
+            int expectedAnswer = expectedAnswers[i];
 
             // when
-            byte actualAnswer = Task7.rotateRight(n, shift);
+            int actualAnswer = Task7.rotateRight(n, shift);
 
             // then
             assertThat(actualAnswer).isEqualTo(expectedAnswer);
