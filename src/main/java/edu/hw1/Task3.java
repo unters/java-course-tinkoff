@@ -4,9 +4,6 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class Task3 {
-    private Task3() {
-    }
-
     public static boolean isNestable(int[] a, int[] b) {
         if (b == null || a == null) {
             throw new IllegalArgumentException("Input arrays cannot be null.");
@@ -31,5 +28,8 @@ public class Task3 {
         }
 
         return aMin > bMin && aMax < bMax;
+    }
+
+    private Task3() {
     }
 }

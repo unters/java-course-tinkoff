@@ -1,4 +1,4 @@
-![Build Status](https://github.com/sanyarnd/java-course-2023/actions/workflows/build.yml/badge.svg)
+![Build Status](https://github.com/unters/java-course-tinkoff/actions/workflows/build.yml/badge.svg)
 
 Домашние задания курса https://fintech.tinkoff.ru/academy/java
 

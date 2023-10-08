@@ -1,9 +1,6 @@
 package edu.hw1;
 
 public class Task8 {
-    private Task8() {
-    }
-
     private static final int[][] MOVES = {
         {-2, 1}, {-1, 2}, {1, 2}, {2, 1}, {2, -1}, {1, -2}, {-1, -2}, {-2, -1}
     };
@@ -41,5 +38,8 @@ public class Task8 {
         }
 
         return true;
+    }
+
+    private Task8() {
     }
 }

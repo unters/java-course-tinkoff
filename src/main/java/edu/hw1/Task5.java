@@ -1,10 +1,7 @@
 package edu.hw1;
 
 public class Task5 {
-    private Task5() {
-    }
-
-    /* Let's assume that we can build descendant value only for string with even size.  */
+    /* Let's assume that we can build descendant value only for integers with even number of digits.  */
     public static boolean isPalindromeDescendant(int value) {
         if (value < 0) {
             throw new IllegalArgumentException("value cannot be negative.");
@@ -40,5 +37,8 @@ public class Task5 {
         }
 
         return true;
+    }
+
+    private Task5() {
     }
 }
