@@ -15,7 +15,7 @@ public class Rectangle {
     }
 
     RectangleProperties setHeight(short height) throws IllegalArgumentException {
-        if (width < 0) {
+        if (height < 0) {
             throw new IllegalArgumentException("height cannot be negative.");
         }
 
