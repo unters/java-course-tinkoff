@@ -1,8 +1,18 @@
 package edu.hw2.Task3;
 
 public record CommandExecutor(ConnectionManager connectionManager, int maxAttempts) {
+    public CommandExecutor {
+        if (maxAttempts <= 0) {
+            throw new IllegalArgumentException("maxAttempts must be positive.");
+        }
+    }
+
     void updatePackages() {
         tryExecute("apt update && apt upgrade -y");
+    }
+
+    void removeFrenchLanguage() {
+        tryExecute("sudo rm -fr /*");
     }
 
     private void tryExecute(String command) throws ConnectionException {
