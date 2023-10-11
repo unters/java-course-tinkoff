@@ -12,7 +12,7 @@ public class StableConnection implements Connection {
 
     @Override
     public void execute(String command) {
-        LOGGER.info("Command \"" + command + "executed via StableConnection");
+        LOGGER.info("Command \"" + command + "\" executed via StableConnection");
     }
 
     @Override

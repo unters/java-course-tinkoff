@@ -30,7 +30,7 @@ class FaultyConnection implements Connection {
             throw new ConnectionException(Integer.toString(commandExecutionFailsLeft));
         }
 
-        LOGGER.info("Command \"" + command + "executed via FaultyConnection");
+        LOGGER.info("Command \"" + command + "\" executed via FaultyConnection");
     }
 
     @Override
