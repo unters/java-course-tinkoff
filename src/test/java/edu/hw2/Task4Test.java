@@ -14,19 +14,41 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class Task4Test {
     /* Class to test Task4.getCallingInfo().  */
     private static class ClassA {
-        public static CallingInfo method_1() {
+        public static CallingInfo methodOne() {
             return Task4.getCallingInfo();
         }
 
-        public static CallingInfo method_2() {
+        public static CallingInfo methodTwo() {
             return Task4.getCallingInfo();
+        }
+
+        public static CallingInfo methodWithLambda() {
+            Supplier<CallingInfo> caller = new Supplier<CallingInfo>() {
+                @Override
+                public CallingInfo get() {
+                    return Task4.getCallingInfo();
+                }
+            };
+
+            return caller.get();
         }
     }
 
     /* Class to test Task4.getCallingInfo().  */
     private static class ClassB {
-        public static CallingInfo method_1() {
+        public CallingInfo callingInfo;
+
+        private ClassB() {
+            callingInfo = Task4.getCallingInfo();
+        }
+
+        public static CallingInfo methodOne() {
             return Task4.getCallingInfo();
+        }
+
+        public static CallingInfo methodTwo() {
+            ClassB b = new ClassB();
+            return b.callingInfo;
         }
     }
 
@@ -36,16 +58,24 @@ public class Task4Test {
         public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
             return Stream.of(
                 Arguments.of(
-                    (Supplier<CallingInfo>) ClassA::method_1,
-                    new CallingInfo("edu.hw2.Task4Test$ClassA", "method_1")
+                    (Supplier<CallingInfo>) ClassA::methodOne,
+                    new CallingInfo("edu.hw2.Task4Test$ClassA", "methodOne")
                 ),
                 Arguments.of(
-                    (Supplier<CallingInfo>) ClassA::method_2,
-                    new CallingInfo("edu.hw2.Task4Test$ClassA", "method_2")
+                    (Supplier<CallingInfo>) ClassA::methodTwo,
+                    new CallingInfo("edu.hw2.Task4Test$ClassA", "methodTwo")
                 ),
                 Arguments.of(
-                    (Supplier<CallingInfo>) ClassB::method_1,
-                    new CallingInfo("edu.hw2.Task4Test$ClassB", "method_1")
+                    (Supplier<CallingInfo>) ClassA::methodWithLambda,
+                    new CallingInfo("edu.hw2.Task4Test$ClassA$1", "get")
+                ),
+                Arguments.of(
+                    (Supplier<CallingInfo>) ClassB::methodOne,
+                    new CallingInfo("edu.hw2.Task4Test$ClassB", "methodOne")
+                ),
+                Arguments.of(
+                    (Supplier<CallingInfo>) ClassB::methodTwo,
+                    new CallingInfo("edu.hw2.Task4Test$ClassB", "<init>")
                 )
             );
         }
