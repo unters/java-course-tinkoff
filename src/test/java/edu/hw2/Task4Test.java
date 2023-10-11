@@ -23,6 +23,10 @@ public class Task4Test {
         }
 
         public static CallingInfo methodWithLambda() {
+            /* IDE hint says that the following functional interface implementation can be replaced with lambda
+             * expression or even a reference to a method. However, I have intentionally implemented
+             * Supplier<CallingInfo> the way I did to see what name is assigned to an anonymous class implementing
+             * a functional interface (this name appeared to be "1").  */
             Supplier<CallingInfo> caller = new Supplier<CallingInfo>() {
                 @Override
                 public CallingInfo get() {

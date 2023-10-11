@@ -2,7 +2,7 @@ package edu.hw2;
 
 public class Task4 {
     public static CallingInfo getCallingInfo() {
-        CallingInfo callingInfo = null;
+        CallingInfo callingInfo;
         try {
             throw new RuntimeException();
         } catch (Exception e) {
