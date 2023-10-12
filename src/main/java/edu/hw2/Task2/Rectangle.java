@@ -1,32 +1,30 @@
 package edu.hw2.Task2;
 
 public class Rectangle {
-    /* Let's assume that width and height can equal to zero.  */
-    protected short width = 0;
-    protected short height = 0;
+    protected short width;
+    protected short height;
 
-    RectangleProperties setWidth(short width) throws IllegalArgumentException {
-        if (width < 0) {
-            throw new IllegalArgumentException("width cannot be negative.");
+    Rectangle(short width, short height) {
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException("width and height must be positive.");
         }
 
         this.width = width;
-        return new RectangleProperties(this.width, this.height);
-    }
-
-    RectangleProperties setHeight(short height) throws IllegalArgumentException {
-        if (height < 0) {
-            throw new IllegalArgumentException("height cannot be negative.");
-        }
-
         this.height = height;
-        return new RectangleProperties(this.width, this.height);
     }
 
-    int getArea() {
-        return (int) width * height;
+    protected Rectangle() {
     }
 
-    public record RectangleProperties(short width, short height) {
+    public short width() {
+        return this.width;
+    }
+
+    public short height() {
+        return this.height;
+    }
+
+    public int getArea() {
+        return width * height;
     }
 }

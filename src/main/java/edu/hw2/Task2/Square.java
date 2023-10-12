@@ -1,23 +1,16 @@
 package edu.hw2.Task2;
 
 public class Square extends Rectangle {
-    RectangleProperties setSide(short sideLength) throws IllegalArgumentException {
-        super.setHeight(sideLength);
-        return super.setWidth(sideLength);
-    }
+    Square(short width, short height) {
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException("width and height must be positive.");
+        }
 
-    @Override
-    RectangleProperties setWidth(short width) throws IllegalArgumentException {
-        return setSide(width);
-    }
+        if (width != height) {
+            throw new IllegalArgumentException("Square must have equal width and height.");
+        }
 
-    @Override
-    RectangleProperties setHeight(short height) throws IllegalArgumentException {
-        return setSide(height);
-    }
-
-    @Override
-    int getArea() {
-        return (int) width * width;
+        this.width = width;
+        this.height = height;
     }
 }
