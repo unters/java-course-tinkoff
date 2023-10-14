@@ -13,6 +13,22 @@ public class Rectangle {
         this.height = height;
     }
 
+    public final Rectangle setWidth(short width) {
+        if (width <= 0) {
+            throw new IllegalArgumentException("width must be positive.");
+        }
+
+        return new Rectangle(width, this.height);
+    }
+
+    public final Rectangle setHeight(short height) {
+        if (height <= 0) {
+            throw new IllegalArgumentException("height must be positive.");
+        }
+
+        return new Rectangle(this.width, height);
+    }
+
     protected Rectangle() {
     }
 
