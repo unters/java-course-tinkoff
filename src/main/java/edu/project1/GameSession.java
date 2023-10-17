@@ -56,38 +56,39 @@ final class GameSession {
     void start() {
         System.out.println(getGameState());
 
-        try (Scanner scanner = new Scanner(System.in)) {
-            while (attempts > 0 && guessedCharactersCount != answer.length()) {
-                System.out.print("> ");
-                String input = scanner.nextLine();
-                if (STOP_COMMAND.equals(input)) {
-                    System.out.println(GAME_STOPPED_MESSAGE);
-                    return;
-                } else if (!Pattern.matches(GUESS_REGEX, input)) {
-                    System.out.println(WRONG_INPUT_MESSAGE);
-                    System.out.println(getGameState());
-                    continue;
-                }
-
-                char letter = input.charAt(0);
-                if (lettersPresentedInAnswer.contains(letter)) {
-                    if (lettersPickedByPlayer.contains(letter)) {
-                        System.out.println(LETTER_ALREADY_BEEN_PICKED_SUCCESSFULLY_MESSAGE);
-                    } else {
-                        applyGuess(letter);
-                        System.out.println(SUCCESSFUL_GUESS_MESSAGE);
-                    }
-                } else {
-                    if (lettersPickedByPlayer.contains(letter)) {
-                        System.out.println(LETTER_ALREADY_BEEN_PICKED_UNSUCCESSFULLY_MESSAGE);
-                    } else {
-                        --attempts;
-                        System.out.println(UNSUCCESSFUL_GUESS_MESSAGE);
-                    }
-                }
-
+        Scanner scanner = new Scanner(System.in);
+        while (attempts > 0 && guessedCharactersCount != answer.length()) {
+            System.out.print("> ");
+            String input = scanner.nextLine();
+            if (STOP_COMMAND.equals(input)) {
+                System.out.println(GAME_STOPPED_MESSAGE);
+                return;
+            } else if (!Pattern.matches(GUESS_REGEX, input)) {
+                System.out.println(WRONG_INPUT_MESSAGE);
                 System.out.println(getGameState());
+                continue;
             }
+
+            char letter = input.charAt(0);
+            if (lettersPresentedInAnswer.contains(letter)) {
+                if (lettersPickedByPlayer.contains(letter)) {
+                    System.out.println(LETTER_ALREADY_BEEN_PICKED_SUCCESSFULLY_MESSAGE);
+                } else {
+                    applyGuess(letter);
+                    lettersPickedByPlayer.add(letter);
+                    System.out.println(SUCCESSFUL_GUESS_MESSAGE);
+                }
+            } else {
+                if (lettersPickedByPlayer.contains(letter)) {
+                    System.out.println(LETTER_ALREADY_BEEN_PICKED_UNSUCCESSFULLY_MESSAGE);
+                } else {
+                    --attempts;
+                    lettersPickedByPlayer.add(letter);
+                    System.out.println(UNSUCCESSFUL_GUESS_MESSAGE);
+                }
+            }
+
+            System.out.println(getGameState());
         }
 
         if (attempts == 0) {

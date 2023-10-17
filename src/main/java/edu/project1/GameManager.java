@@ -36,14 +36,24 @@ final class GameManager {
                         GameSession session = new GameSession(dictionary.getRandomWord(), MAX_NUMBER_OF_WRONG_GUESSES);
                         session.start();
                     }
-                    case "help" -> System.out.println(HELP_MESSAGE);
+
+                    case "help" -> {
+                        System.out.println(HELP_MESSAGE);
+                    }
+
                     case "exit" -> {
                         System.out.println(EXIT_MESSAGE);
                         scanner.close();
                         return;
                     }
-                    case "rules" -> System.out.println(RULES_MESSAGE);
-                    default -> System.out.println(USAGE_MESSAGE + "\n" + HELP_MESSAGE);
+
+                    case "rules" -> {
+                        System.out.println(RULES_MESSAGE);
+                    }
+
+                    default -> {
+                        System.out.println(USAGE_MESSAGE + "\n" + HELP_MESSAGE);
+                    }
                 }
             }
         }
