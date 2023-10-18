@@ -1,4 +1,4 @@
-package edu.hw2.Task3;
+package edu.hw2.task3;
 
 public record CommandExecutor(ConnectionManager connectionManager, int maxAttempts) {
     public CommandExecutor {

@@ -1,4 +1,4 @@
-package edu.hw2.Task3;
+package edu.hw2.task3;
 
 public class ConnectionException extends RuntimeException {
     ConnectionException(String message) {

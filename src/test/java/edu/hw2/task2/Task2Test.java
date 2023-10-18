@@ -1,4 +1,4 @@
-package edu.hw2.Task2;
+package edu.hw2.task2;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -6,6 +6,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import java.util.stream.Stream;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -16,8 +17,8 @@ public class Task2Test {
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
             return Stream.of(
-                Arguments.of(new Rectangle((short) 15, (short) 12), 180),
-                Arguments.of(new Square((short) 10, (short) 10), 100)
+                Arguments.of(new Rectangle(15, 12), 180),
+                Arguments.of(new Square(10, 10), 100)
             );
         }
     }
@@ -26,10 +27,10 @@ public class Task2Test {
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
             return Stream.of(
-                Arguments.of(new Rectangle((short) 15, (short) 12), (short) -10),
-                Arguments.of(new Square((short) 10, (short) 10), (short) -13),
-                Arguments.of(new Rectangle((short) 15, (short) 12), (short) 0),
-                Arguments.of(new Square((short) 10, (short) 10), (short) 0)
+                Arguments.of(new Rectangle(15, 12), -10),
+                Arguments.of(new Square(10, 10), -13),
+                Arguments.of(new Rectangle(15, 12), 0),
+                Arguments.of(new Square(10, 10), 0)
             );
         }
     }
@@ -38,8 +39,8 @@ public class Task2Test {
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
             return Stream.of(
-                Arguments.of(new Rectangle((short) 15, (short) 12), (short) 10, 150),
-                Arguments.of(new Square((short) 10, (short) 10), (short) 13, 130)
+                Arguments.of(new Rectangle(15, 12), 10, 150),
+                Arguments.of(new Square(10, 10), 13, 130)
             );
         }
     }
@@ -48,15 +49,35 @@ public class Task2Test {
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
             return Stream.of(
-                Arguments.of(new Rectangle((short) 15, (short) 12), (short) 10, 120),
-                Arguments.of(new Square((short) 10, (short) 10), (short) 15, 150)
+                Arguments.of(new Rectangle(15, 12), 10, 120),
+                Arguments.of(new Square(10, 10), 15, 150)
+            );
+        }
+    }
+
+    private static final class SquareSetSideInvalidArgumentsProvider implements ArgumentsProvider {
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+            return Stream.of(
+                Arguments.of(new Square(15), -52),
+                Arguments.of(new Square(10), 0)
+            );
+        }
+    }
+
+    private static final class GetAreaAfterChangingSquareSideTestArgumentsProvider implements ArgumentsProvider {
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+            return Stream.of(
+                Arguments.of(new Square(15), 10, 100),
+                Arguments.of(new Square(10, 10), 15, 225)
             );
         }
     }
 
     @ParameterizedTest
     @CsvSource({"-15, 1", "12, -10", "0, 2", "-10, -10"})
-    void rectangleConstructor_NonPositiveArgumentsPassed_ThrowIllegalArgumentsException(short width, short height) {
+    void rectangleConstructor_NonPositiveArgumentsPassed_ThrowIllegalArgumentsException(int width, int height) {
         assertThrows(IllegalArgumentException.class, () -> {
             Rectangle rectangle = new Rectangle(width, height);
         });
@@ -64,7 +85,26 @@ public class Task2Test {
 
     @ParameterizedTest
     @CsvSource({"-15, 1", "12, -10", "0, 2", "-10, -10"})
-    void squareConstructor_NonPositiveArgumentsPassed_ThrowIllegalArgumentsException(short width, short height) {
+    void squareWidthHeightConstructor_NonPositiveArgumentsPassed_ThrowIllegalArgumentsException(int width, int height) {
+        assertThrows(IllegalArgumentException.class, () -> {
+            Rectangle rectangle = new Square(width, height);
+        });
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {-12, 0})
+    void squareSideConstructor_NonPositiveArgumentsPassed_ThrowIllegalArgumentsException(int side) {
+        assertThrows(IllegalArgumentException.class, () -> {
+            Rectangle rectangle = new Square(side);
+        });
+    }
+
+    @ParameterizedTest
+    @CsvSource({"15, 1", "12, 10"})
+    void squareWidthHeightConstructor_PositiveNotEqualArgumentsPassed_ThrowIllegalArgumentsException(
+        int width,
+        int height
+    ) {
         assertThrows(IllegalArgumentException.class, () -> {
             Rectangle rectangle = new Square(width, height);
         });
@@ -72,15 +112,7 @@ public class Task2Test {
 
     @ParameterizedTest
     @CsvSource({"15, 1", "12, 10"})
-    void squareConstructor_PositiveNotEqualArgumentsPassed_ThrowIllegalArgumentsException(short width, short height) {
-        assertThrows(IllegalArgumentException.class, () -> {
-            Rectangle rectangle = new Square(width, height);
-        });
-    }
-
-    @ParameterizedTest
-    @CsvSource({"15, 1", "12, 10"})
-    void rectangleConstructor_PositiveNotEqualArgumentsPassed_NoExceptionIsThrown(short width, short height) {
+    void rectangleConstructor_PositiveNotEqualArgumentsPassed_NoExceptionIsThrown(int width, int height) {
         assertDoesNotThrow(() -> {
             Rectangle rectangle = new Rectangle(width, height);
         });
@@ -88,22 +120,30 @@ public class Task2Test {
 
     @ParameterizedTest
     @CsvSource({"1, 1", "10, 10"})
-    void squareConstructor_PositiveEqualArgumentsPassed_NoExceptionIsThrown(short width, short height) {
+    void squareWidthHeightConstructor_PositiveEqualArgumentsPassed_NoExceptionIsThrown(int width, int height) {
         assertDoesNotThrow(() -> {
             Rectangle rectangle = new Square(width, height);
         });
     }
 
     @ParameterizedTest
+    @ValueSource(ints = {1, 42, 48921})
+    void squareSideConstructor_PositiveArgumentPassed_NoExceptionIsThrown(int side) {
+        assertDoesNotThrow(() -> {
+            Rectangle rectangle = new Square(side);
+        });
+    }
+
+    @ParameterizedTest
     @ArgumentsSource(ValidRectanglesArgumentsProvider.class)
-    void getArea_RectangleIsValid_ReturnExpectedAnswer(Rectangle rectangle, int expectedAnswer) {
-        int actualAnswer = rectangle.getArea();
+    void getArea_RectangleIsValid_ReturnExpectedAnswer(Rectangle rectangle, long expectedAnswer) {
+        long actualAnswer = rectangle.getArea();
         assertThat(actualAnswer).isEqualTo(expectedAnswer);
     }
 
     @ParameterizedTest
     @ArgumentsSource(RectangleSetWidthOrHeightInvalidArgumentsProvider.class)
-    void rectangleSetWidth_InvalidArgumentPassed_ThrowIllegalArgumentException(Rectangle rectangle, short width) {
+    void rectangleSetWidth_InvalidArgumentPassed_ThrowIllegalArgumentException(Rectangle rectangle, int width) {
         assertThrows(IllegalArgumentException.class, () -> {
             rectangle.setWidth(width);
         });
@@ -111,9 +151,17 @@ public class Task2Test {
 
     @ParameterizedTest
     @ArgumentsSource(RectangleSetWidthOrHeightInvalidArgumentsProvider.class)
-    void rectangleSetHeight_InvalidArgumentPassed_ThrowIllegalArgumentException(Rectangle rectangle, short height) {
+    void rectangleSetHeight_InvalidArgumentPassed_ThrowIllegalArgumentException(Rectangle rectangle, int height) {
         assertThrows(IllegalArgumentException.class, () -> {
             rectangle.setHeight(height);
+        });
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(SquareSetSideInvalidArgumentsProvider.class)
+    void squareSetSide_InvalidArgumentPassed_ThrowIllegalArgumentException(Square square, int side) {
+        assertThrows(IllegalArgumentException.class, () -> {
+            square.setHeight(side);
         });
     }
 
@@ -121,11 +169,11 @@ public class Task2Test {
     @ArgumentsSource(GetAreaAfterChangingHeightTestArgumentsProvider.class)
     void getArea_ChangeHeightOfTheRectangle_ReturnExpectedAnswer(
         Rectangle rectangle,
-        short newHeight,
-        int expectedAnswer
+        int newHeight,
+        long expectedAnswer
     ) {
         Rectangle rectangleAfterModification = rectangle.setHeight(newHeight);
-        int actualAnswer = rectangleAfterModification.getArea();
+        long actualAnswer = rectangleAfterModification.getArea();
         assertThat(actualAnswer).isEqualTo(expectedAnswer);
     }
 
@@ -133,11 +181,19 @@ public class Task2Test {
     @ArgumentsSource(GetAreaAfterChangingWidthTestArgumentsProvider.class)
     void getArea_ChangeWidthOfTheRectangle_ReturnExpectedAnswer(
         Rectangle rectangle,
-        short newWidth,
-        int expectedAnswer
+        int newWidth,
+        long expectedAnswer
     ) {
         Rectangle rectangleAfterModification = rectangle.setWidth(newWidth);
-        int actualAnswer = rectangleAfterModification.getArea();
+        long actualAnswer = rectangleAfterModification.getArea();
+        assertThat(actualAnswer).isEqualTo(expectedAnswer);
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(GetAreaAfterChangingSquareSideTestArgumentsProvider.class)
+    void getArea_ChangeSideOfTheSquare_ReturnExpectedAnswer(Square square, int newSide, long expectedAnswer) {
+        Square rectangleAfterModification = square.setSide(newSide);
+        long actualAnswer = rectangleAfterModification.getArea();
         assertThat(actualAnswer).isEqualTo(expectedAnswer);
     }
 }
