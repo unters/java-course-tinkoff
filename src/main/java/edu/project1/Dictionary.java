@@ -12,7 +12,7 @@ final class Dictionary {
     private static final String WORD_REGEX = "[a-z]{3,}";
     private static final Random RANDOM = new Random();
 
-    private final List<String> words;
+    private final List<RiddleWord> words;
 
     Dictionary(String filepath) throws IOException {
         words = new ArrayList<>();
@@ -21,22 +21,17 @@ final class Dictionary {
             Scanner scanner = new Scanner(in);
             while(scanner.hasNext()) {
                 String word = scanner.next();
-                if (!Pattern.matches(WORD_REGEX, word)) {
-                    throw new IOException("Given file must contain words of length greater than 2 and consisting " +
-                        "only from lowercase english characters.");
-                }
-
-                words.add(word);
+                words.add(new RiddleWord(word));
             }
         }
     }
 
-    String getRandomWord() {
+    RiddleWord getRandomWord() {
         int randomIndex = RANDOM.nextInt(words.size());
         return words.get(randomIndex);
     }
 
-    List<String> getWords() {
+    List<RiddleWord> getWords() {
         return new ArrayList<>(words);
     }
 }

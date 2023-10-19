@@ -15,11 +15,11 @@ final class GameSession {
     private static final String GAME_STOPPED_MESSAGE = "Game session was stopped.";
     private static final String SUCCESSFUL_GUESS_MESSAGE = "That's a hit!";
     private static final String UNSUCCESSFUL_GUESS_MESSAGE = "N-n-nope. Wrong one.";
-    private static final String LETTER_ALREADY_BEEN_PICKED_SUCCESSFULLY_MESSAGE =
-        "You have already picked this letter and you were right.";
-    private static final String LETTER_ALREADY_BEEN_PICKED_UNSUCCESSFULLY_MESSAGE =
+    private static final String LETTER_HAS_ALREADY_BEEN_PICKED_SUCCESSFULLY_MESSAGE =
+        "This letter has been already picked.";
+    private static final String LETTER_HAS_ALREADY_BEEN_PICKED_UNSUCCESSFULLY_MESSAGE =
         "You have already picked this letter and it was wrong.";
-    private static final String LOSE_MESSAGE = "You have lost. Want to try again?";
+    private static final String LOSE_MESSAGE = "You have lost. Enter `start` to try again.";
     private static final String WIN_MESSAGE = "You have won! Congratulations!";
 
     private final String answer;
@@ -37,8 +37,8 @@ final class GameSession {
     private int attempts;
     private int guessedCharactersCount;
 
-    GameSession(String answer, int attempts) {
-        this.answer = answer;
+    GameSession(RiddleWord riddleWord, int attempts) {
+        this.answer = riddleWord.word();
         for (char c : answer.toCharArray()) {
             lettersPresentedInAnswer.add(c);
         }
@@ -46,11 +46,31 @@ final class GameSession {
         this.attempts = attempts;
         maxAttempts = attempts;
 
+        /* Initialize guessedWord according to the rules.  */
         guessedWord = new char[answer.length()];
         Arrays.fill(guessedWord, '_');
-        guessedWord[0] = answer.charAt(0);
-        guessedWord[answer.length() - 1] = answer.charAt(answer.length() - 1);
-        guessedCharactersCount = 2;
+
+        for (int i = 0; i < answer.length(); ++i) {
+            if (answer.charAt(i) == answer.charAt(0)) {
+                guessedWord[i] = answer.charAt(0);
+            }
+        }
+
+        for (int i = 0; i < answer.length(); ++i) {
+            if (answer.charAt(i) == answer.charAt(answer.length() - 1)) {
+                guessedWord[i] = answer.charAt(answer.length() - 1);
+            }
+        }
+
+        lettersPickedByPlayer.add(guessedWord[0]);
+        lettersPickedByPlayer.add(guessedWord[answer.length() - 1]);
+
+        guessedCharactersCount = 0;
+        for (char c : guessedWord) {
+            if (c != '_') {
+                ++ guessedCharactersCount;
+            }
+        }
     }
 
     void start() {
@@ -72,7 +92,7 @@ final class GameSession {
             char letter = input.charAt(0);
             if (lettersPresentedInAnswer.contains(letter)) {
                 if (lettersPickedByPlayer.contains(letter)) {
-                    System.out.println(LETTER_ALREADY_BEEN_PICKED_SUCCESSFULLY_MESSAGE);
+                    System.out.println(LETTER_HAS_ALREADY_BEEN_PICKED_SUCCESSFULLY_MESSAGE);
                 } else {
                     applyGuess(letter);
                     lettersPickedByPlayer.add(letter);
@@ -80,7 +100,7 @@ final class GameSession {
                 }
             } else {
                 if (lettersPickedByPlayer.contains(letter)) {
-                    System.out.println(LETTER_ALREADY_BEEN_PICKED_UNSUCCESSFULLY_MESSAGE);
+                    System.out.println(LETTER_HAS_ALREADY_BEEN_PICKED_UNSUCCESSFULLY_MESSAGE);
                 } else {
                     --attempts;
                     lettersPickedByPlayer.add(letter);
