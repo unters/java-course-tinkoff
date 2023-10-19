@@ -6,11 +6,8 @@ public class Task4 {
         try {
             throw new RuntimeException();
         } catch (Exception e) {
-            StackTraceElement[] stackTrace = e.getStackTrace();
-            StackTraceElement caller = stackTrace[1];
-            String className = caller.getClassName();
-            String methodName = caller.getMethodName();
-            callingInfo = new CallingInfo(className, methodName);
+            StackTraceElement caller = e.getStackTrace()[1];
+            callingInfo = new CallingInfo(caller.getClassName(), caller.getMethodName());
         }
 
         return callingInfo;

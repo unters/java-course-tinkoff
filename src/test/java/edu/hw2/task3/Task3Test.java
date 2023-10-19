@@ -26,6 +26,9 @@ public class Task3Test {
         ConnectionManager connectionManager = new DefaultConnectionManager(10);
         CommandExecutor commandExecutor = new CommandExecutor(connectionManager, MAX_ATTEMPTS_DEFAULT);
         assertThrows(ConnectionException.class, commandExecutor::updatePackages);
+//        var e = assertThrows(ConnectionException.class, commandExecutor::updatePackages);
+//        System.out.println(e.getMessage());
+//        System.out.println(e.getCause().getMessage());
     }
 
     @Test

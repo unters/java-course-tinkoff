@@ -26,8 +26,7 @@ public class DefaultConnectionManager implements ConnectionManager {
     @Override
     public Connection getConnection() {
         if (faultyConnectionsLeft > 0) {
-            --faultyConnectionsLeft;
-            return new FaultyConnection(faultyConnectionsLeft + 1);
+            return new FaultyConnection(faultyConnectionsLeft--);
         }
 
         return new StableConnection();
