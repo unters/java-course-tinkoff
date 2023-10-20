@@ -1,10 +1,12 @@
 package edu.project1;
 
 final class LowercaseEnglishLettersSet {
+    private static final int NUMBER_OF_LETTERS_IN_ENGLISH_ALPHABET = 26;
+
     private static final String ILLEGAL_ARGUMENT_MESSAGE =
         "Illegal argument. `LowercaseEnglishCharactersSet` can store only lowercase english letters.";
 
-    private final boolean[] characterIsPresent = new boolean[26];
+    private final boolean[] characterIsPresent = new boolean[NUMBER_OF_LETTERS_IN_ENGLISH_ALPHABET];
 
     LowercaseEnglishLettersSet() {
     }
@@ -37,7 +39,7 @@ final class LowercaseEnglishLettersSet {
 
     public int size() {
         int count = 0;
-        for (int i = 0; i < 26; ++i) {
+        for (int i = 0; i < NUMBER_OF_LETTERS_IN_ENGLISH_ALPHABET; ++i) {
             if (characterIsPresent[i]) {
                 ++count;
             }

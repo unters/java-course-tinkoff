@@ -3,6 +3,8 @@ package edu.project1;
 import org.jetbrains.annotations.NotNull;
 
 record RiddleWord(@NotNull String word) {
+    private static final int MIN_NUMBER_OF_DIFFERENT_LETTERS = 3;
+
     RiddleWord {
         if (!wordIsValid(word)) {
             throw new IllegalArgumentException(
@@ -18,6 +20,6 @@ record RiddleWord(@NotNull String word) {
             return false;
         }
 
-        return (lettersSet.size() >= 3);
+        return (lettersSet.size() >= MIN_NUMBER_OF_DIFFERENT_LETTERS);
     }
 }

@@ -48,6 +48,7 @@ final class GameManager {
                             case Win -> System.out.println(WIN_MESSAGE);
                             case Loss -> System.out.println(LOSS_MESSAGE);
                             case GameStopped -> System.out.println(GAME_STOPPED_MESSAGE);
+                            default -> throw new IOException("Unknown game session result.");
                         }
                     }
 

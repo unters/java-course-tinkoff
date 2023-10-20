@@ -16,6 +16,6 @@ final class DictionaryManager {
         }
     }
 
-    private DictionaryManager(){
+    private DictionaryManager() {
     }
 }

@@ -1,7 +1,6 @@
 package edu.project1;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -75,7 +74,7 @@ final class GameSession {
         guessedCharactersCount = 0;
         for (char c : guessedWord) {
             if (c != '_') {
-                ++ guessedCharactersCount;
+                ++guessedCharactersCount;
             }
         }
     }

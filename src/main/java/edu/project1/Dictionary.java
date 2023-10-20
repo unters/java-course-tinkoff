@@ -1,11 +1,11 @@
 package edu.project1;
 
-import org.jetbrains.annotations.NotNull;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import org.jetbrains.annotations.NotNull;
 
 final class Dictionary {
     private static final Random RANDOM = new Random();
@@ -15,7 +15,7 @@ final class Dictionary {
     Dictionary(@NotNull InputStream inputStream) {
         words = new ArrayList<>();
         Scanner scanner = new Scanner(inputStream);
-        while(scanner.hasNext()) {
+        while (scanner.hasNext()) {
             String word = scanner.next();
             words.add(new RiddleWord(word));
         }
