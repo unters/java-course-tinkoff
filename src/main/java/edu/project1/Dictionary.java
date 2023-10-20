@@ -1,28 +1,23 @@
 package edu.project1;
 
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 final class Dictionary {
-    private static final String WORD_REGEX = "[a-z]{3,}";
     private static final Random RANDOM = new Random();
 
     private final List<RiddleWord> words;
 
-    Dictionary(String filepath) throws IOException {
+    Dictionary(@NotNull InputStream inputStream) {
         words = new ArrayList<>();
-        try (InputStream in = this.getClass().getClassLoader().getResourceAsStream(filepath)) {
-            assert in != null;
-            Scanner scanner = new Scanner(in);
-            while(scanner.hasNext()) {
-                String word = scanner.next();
-                words.add(new RiddleWord(word));
-            }
+        Scanner scanner = new Scanner(inputStream);
+        while(scanner.hasNext()) {
+            String word = scanner.next();
+            words.add(new RiddleWord(word));
         }
     }
 
