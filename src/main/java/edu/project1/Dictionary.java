@@ -25,8 +25,4 @@ final class Dictionary {
         int randomIndex = RANDOM.nextInt(words.size());
         return words.get(randomIndex);
     }
-
-    List<RiddleWord> getWords() {
-        return new ArrayList<>(words);
-    }
 }
