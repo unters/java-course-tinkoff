@@ -19,7 +19,16 @@ final class GameManager {
         rules       Get "The Hangman" game rules.
         exit        Exit the program.
         stop        Stop the gaming session (available in the game session only).""";
-    private static final String RULES_MESSAGE = "[rules placeholder]";
+    private static final String RULES_MESSAGE = """
+        Game rules
+        The goal of the game is to guess the riddle word by naming the letters of which it consists. The player can
+        make 5 mistakes. At the beginning of the game, there are at least two letters that are opened as a hint for
+        the player: the first and last, as well as all their entries into the riddle word. The riddle word satisfies
+        the following conditions:
+        1. The riddle word consists from lowercase English letters only.
+        2. The riddle word has at least three different characters.
+
+        Enter `start` to start the game. Enter `help` to get the list of command.""";
     private static final String USAGE_MESSAGE = "Wrong usage. Type in the command from the commands list.";
     private static final String EXIT_MESSAGE = "Thanks for playing \"The Hangman\" game.";
     private static final String WIN_MESSAGE = "You have won! Congratulations!";
