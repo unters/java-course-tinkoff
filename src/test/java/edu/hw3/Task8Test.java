@@ -1,7 +1,5 @@
 package edu.hw3;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,7 +9,6 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 import static edu.hw3.Task8.BackwardIterator;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

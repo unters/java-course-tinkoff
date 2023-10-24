@@ -13,7 +13,6 @@ public class Task4 {
         }
 
         int temp = value;
-        int numberOfDigits = edu.hw1.Task2.countDigits(value);
         StringBuilder sb = new StringBuilder();
 
         /* Thousands.  */
