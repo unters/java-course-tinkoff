@@ -44,7 +44,7 @@ public class Task2Test {
     @ParameterizedTest
     @NullSource
     void clusterizeString_NullArgumentPassed_ThrowIllegalArgumentException(String s) {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(NullPointerException.class, () -> {
             clusterizeString(s);
         });
     }

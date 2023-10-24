@@ -1,9 +1,11 @@
 package edu.hw3;
 
-import org.jetbrains.annotations.NotNull;
-
 public class Task1 {
-    public static String encryptUsingAtbash(@NotNull String s) {
+    public static String encryptUsingAtbash(String s) {
+        if (s == null) {
+            throw new NullPointerException("s cannot be null");
+        }
+
         char[] chars = s.toCharArray();
         for (int i = 0; i < chars.length; ++i) {
             char c = chars[i];

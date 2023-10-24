@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import org.jetbrains.annotations.NotNull;
 
 public class Task2 {
     private static final String INVALID_ARGUMENT_MESSAGE = "String s must be a \"valid parentheses\" string.";
 
-    public static List<String> clusterizeString(@NotNull String s) {
+    public static List<String> clusterizeString(String s) {
+        if (s == null) {
+            throw new NullPointerException("s cannot be null");
+        }
+
         List<String> clusters = new ArrayList<>();
         /* Here Deque is used as a stack. I know there is a Stack implementation in Java, but as far as I understand, it
          * is considered obsolete - in many sources it is strongly recommended to use Deque instead of Stack.  */

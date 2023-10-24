@@ -79,7 +79,7 @@ public class Task3Test {
     @ParameterizedTest
     @NullSource
     void buildFrequencyDictionary_NullReferencePassed_ThrowIllegalArgumentException(List<? super Object> list) {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(NullPointerException.class, () -> {
             buildFrequencyDictionary(list);
         });
     }
