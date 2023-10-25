@@ -7,11 +7,15 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 import static edu.hw3.Task8.BackwardIterator;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task8Test {
     private static final class ListArgumentsProvider implements ArgumentsProvider {
@@ -51,5 +55,13 @@ public class Task8Test {
 
         // then
         assertThat(actualAnswer).isFalse();
+    }
+
+    @Test
+    void next_HasNextReturnsFalse_ThrowsNoSuchElementException() {
+        List<Object> list = Collections.emptyList();
+        BackwardIterator<Object> it = new BackwardIterator<>(list);
+        assertThat(it.hasNext()).isFalse();
+        assertThrows(NoSuchElementException.class, it::next);
     }
 }
