@@ -49,34 +49,49 @@ public class Task5 {
             }
 
             if (this.surname == null && anotherContact.surname == null) {
-                if (this.name == null && anotherContact.name == null) {
-                    return 0;
-                }
-
-                if (this.name == null) {
-                    return -1;
-                }
-
-                if (anotherContact.name == null) {
-                    return 1;
-                }
-
-                return this.name.compareTo(anotherContact.name());
+                return compareToByName(anotherContact);
             }
 
             if (this.surname == null) {
-                if (this.name == null) {
-                    return -1;
-                }
-
-                return this.name.compareTo(anotherContact.surname());
+                return compareNameToAnotherContactSurname(anotherContact);
             }
 
+            return compareSurnameToAnotherContactName(anotherContact);
+        }
+
+        /* This private method is intended to be used in compareTo method only.  */
+        private int compareToByName(Contact anotherContact) {
+            if (this.name == null && anotherContact.name == null) {
+                return 0;
+            }
+
+            if (this.name != null && anotherContact.name != null) {
+                return this.name.compareTo(anotherContact.name);
+            }
+
+            if (this.name == null) {
+                return -1;
+            }
+
+            return 1;
+        }
+
+        /* This private method is intended to be used in compareTo method only.  */
+        private int compareNameToAnotherContactSurname(Contact anotherContact) {
+            if (this.name == null) {
+                return -1;
+            }
+
+            return this.name.compareTo(anotherContact.surname);
+        }
+
+        /* This private method is intended to be used in compareTo method only.  */
+        private int compareSurnameToAnotherContactName(Contact anotherContact) {
             if (anotherContact.name == null) {
                 return 1;
             }
 
-            return this.surname.compareTo(anotherContact.name());
+            return this.surname.compareTo(anotherContact.name);
         }
     }
 }

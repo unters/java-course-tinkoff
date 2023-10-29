@@ -1,11 +1,11 @@
 package edu.hw3;
 
+@SuppressWarnings("MagicNumber")    // This suppression is vital.
 public class Task4 {
     /* According to Alexander Biryukov, it is permitted to limit input value by [1, 3999].  */
     private static final int MIN_PERMITTED_VALUE = 1;
     private static final int MAX_PERMITTED_VALUE = 3999;
 
-    @SuppressWarnings("MagicNumber")    // This suppression is vital.
     public static String convertToRoman(int value) {
         if (value < MIN_PERMITTED_VALUE || value > MAX_PERMITTED_VALUE) {
             throw new IllegalArgumentException(
@@ -24,7 +24,7 @@ public class Task4 {
         return switch (hundreds) {
             case 9 -> "CM";
             case 8, 7, 6, 5 -> "D" + "C".repeat(hundreds - 5);
-            case 4 -> "CD" ;
+            case 4 -> "CD";
             case 3, 2, 1 -> "C".repeat(hundreds);
             default -> "";
         };
@@ -35,7 +35,7 @@ public class Task4 {
         return switch (dozens) {
             case 9 -> "XC";
             case 8, 7, 6, 5 -> "L" + "X".repeat(dozens - 5);
-            case 4 -> "XL" ;
+            case 4 -> "XL";
             case 3, 2, 1 -> "X".repeat(dozens);
             default -> "";
         };
@@ -46,7 +46,7 @@ public class Task4 {
         return switch (units) {
             case 9 -> "IX";
             case 8, 7, 6, 5 -> "V" + "I".repeat(units - 5);
-            case 4 -> "IV" ;
+            case 4 -> "IV";
             case 3, 2, 1 -> "I".repeat(units);
             default -> "";
         };
