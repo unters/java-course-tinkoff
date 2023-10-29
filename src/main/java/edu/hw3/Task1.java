@@ -3,7 +3,7 @@ package edu.hw3;
 public class Task1 {
     public static String encryptUsingAtbash(String s) {
         if (s == null) {
-            throw new NullPointerException("s cannot be null");
+            throw new IllegalArgumentException("s cannot be null");
         }
 
         char[] chars = s.toCharArray();

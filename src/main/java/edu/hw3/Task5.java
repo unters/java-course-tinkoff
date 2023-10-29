@@ -44,16 +44,36 @@ public class Task5 {
     public record Contact(String name, String surname) implements Comparable<Contact> {
         @Override
         public int compareTo(@NotNull Contact anotherContact) {
-            if (this.surname != null && anotherContact.surname() != null) {
+            if (this.surname != null && anotherContact.surname != null) {
                 return this.surname.compareTo(anotherContact.surname());
             }
 
-            if (this.surname == null && anotherContact.surname() == null) {
+            if (this.surname == null && anotherContact.surname == null) {
+                if (this.name == null && anotherContact.name == null) {
+                    return 0;
+                }
+
+                if (this.name == null) {
+                    return -1;
+                }
+
+                if (anotherContact.name == null) {
+                    return 1;
+                }
+
                 return this.name.compareTo(anotherContact.name());
             }
 
             if (this.surname == null) {
+                if (this.name == null) {
+                    return -1;
+                }
+
                 return this.name.compareTo(anotherContact.surname());
+            }
+
+            if (anotherContact.name == null) {
+                return 1;
             }
 
             return this.surname.compareTo(anotherContact.name());

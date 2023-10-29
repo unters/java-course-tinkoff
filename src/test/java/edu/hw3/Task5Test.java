@@ -81,4 +81,30 @@ public class Task5Test {
         // then
         assertThat(actualAnswer).isEqualTo(expectedAnswer);
     }
+
+    @Test
+    void contactCompareTo_FirstContactHasNullNameAndSurname_ReturnNegativeValue() {
+        // given
+        Contact contact1 = new Contact(null, null);
+        Contact contact2 = new Contact("Alyx", "Vance");
+
+        // when
+        int actualAnswer = contact1.compareTo(contact2);
+
+        // then
+        assertThat(actualAnswer).isNegative();
+    }
+
+    @Test
+    void contactCompareTo_SecondContactHasNullNameAndSurname_ReturnNegativeValue() {
+        // given
+        Contact contact1 = new Contact("Gordon", "Freeman");
+        Contact contact2 = new Contact(null, null);
+
+        // when
+        int actualAnswer = contact1.compareTo(contact2);
+
+        // then
+        assertThat(actualAnswer).isPositive();
+    }
 }

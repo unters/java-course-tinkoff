@@ -6,11 +6,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Task2 {
+    private static final char LEFT_PARENTHESIS = '(';
+    private static final char RIGHT_PARENTHESIS = ')';
+
     private static final String INVALID_ARGUMENT_MESSAGE = "String s must be a \"valid parentheses\" string.";
 
     public static List<String> clusterizeString(String s) {
         if (s == null) {
-            throw new NullPointerException("s cannot be null");
+            throw new IllegalArgumentException("s cannot be null");
         }
 
         List<String> clusters = new ArrayList<>();
@@ -20,10 +23,10 @@ public class Task2 {
         int lastIndex = 0;
         for (int i = 0; i < s.length(); ++i) {
             char c = s.charAt(i);
-            if (c == '(') {
+            if (c == LEFT_PARENTHESIS) {
                 deque.addLast(c);
-            } else if (c == ')') {
-                if (deque.isEmpty() || deque.getLast() != '(') {
+            } else if (c == RIGHT_PARENTHESIS) {
+                if (deque.isEmpty() || deque.getLast() != LEFT_PARENTHESIS) {
                     throw new IllegalArgumentException(INVALID_ARGUMENT_MESSAGE);
                 }
 

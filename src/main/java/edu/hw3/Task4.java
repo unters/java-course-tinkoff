@@ -12,87 +12,44 @@ public class Task4 {
                 "value must be a positive integer not greater than 3999 (given: " + value + ").");
         }
 
-        int temp = value;
-        StringBuilder sb = new StringBuilder();
+        return getThousands(value) + getHundreds(value) + getDozens(value) + getUnits(value);
+    }
 
-        /* Thousands.  */
-        sb.append("M".repeat(temp / 1000));
+    private static String getThousands(int value) {
+        return "M".repeat(value / 1000);
+    }
 
-        /* Hundrends.  */
-        temp %= 1000;
-        int hundreds = temp / 100;
-        switch (hundreds) {
-            case 9 -> {
-                sb.append("CM");
-            }
+    private static String getHundreds(int value) {
+        int hundreds = (value % 1000) / 100;
+        return switch (hundreds) {
+            case 9 -> "CM";
+            case 8, 7, 6, 5 -> "D" + "C".repeat(hundreds - 5);
+            case 4 -> "CD" ;
+            case 3, 2, 1 -> "C".repeat(hundreds);
+            default -> "";
+        };
+    }
 
-            case 5, 6, 7, 8 -> {
-                sb.append("D");
-                sb.append("C".repeat(hundreds - 5));
-            }
+    private static String getDozens(int value) {
+        int dozens = (value % 100) / 10;
+        return switch (dozens) {
+            case 9 -> "XC";
+            case 8, 7, 6, 5 -> "L" + "X".repeat(dozens - 5);
+            case 4 -> "XL" ;
+            case 3, 2, 1 -> "X".repeat(dozens);
+            default -> "";
+        };
+    }
 
-            case 4 -> {
-                sb.append("CD");
-            }
-
-            case 1, 2, 3 -> {
-                sb.append("C".repeat(hundreds));
-            }
-
-            default -> {
-            }
-        }
-
-        /* Dozens.  */
-        temp %= 100;
-        int dozens = temp / 10;
-        switch (dozens) {
-            case 9 -> {
-                sb.append("XC");
-            }
-
-            case 5, 6, 7, 8 -> {
-                sb.append("L");
-                sb.append("X".repeat(dozens - 5));
-            }
-
-            case 4 -> {
-                sb.append("XL");
-            }
-
-            case 1, 2, 3 -> {
-                sb.append("X".repeat(dozens));
-            }
-
-            default -> {
-            }
-        }
-
-        /* Units (one-digit numbers).  */
-        int units = temp % 10;
-        switch (units) {
-            case 9 -> {
-                sb.append("IX");
-            }
-
-            case 5, 6, 7, 8 -> {
-                sb.append("V");
-                sb.append("I".repeat(units - 5));
-            }
-
-            case 4 -> {
-                sb.append("IV");
-            }
-
-            case 1, 2, 3 -> {
-                sb.append("I".repeat(units));
-            }
-
-            default -> {
-            }
-        }
-
-        return sb.toString();
+    private static String getUnits(int value) {
+        int units = value % 10;
+        return switch (units) {
+            case 9 -> "IX";
+            case 8, 7, 6, 5 -> "V" + "I".repeat(units - 5);
+            case 4 -> "IV" ;
+            case 3, 2, 1 -> "I".repeat(units);
+            default -> "";
+        };
     }
 
     private Task4() {

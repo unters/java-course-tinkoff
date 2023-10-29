@@ -17,7 +17,7 @@ public class Task1Test {
 
     @Test
     void encryptUsingAtbash_NullArgumentPassed_ThrowIllegalArgumentException() {
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             encryptUsingAtbash(null);
         });
     }
