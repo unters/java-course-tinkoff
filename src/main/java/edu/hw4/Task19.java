@@ -1,17 +1,14 @@
 package edu.hw4;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.Set;
 
 public class Task19 {
     /* This variable is used as a name addition when multiple animals with the same name exist.  */
     private static long id = 1;
-
-    public record ValidationError(String message) {
-    }
 
     public static Map<String, Set<ValidationError>> getValidationResults(List<Animal> animals) {
         if (animals == null) {
@@ -67,5 +64,11 @@ public class Task19 {
 
     private static String getNextId() {
        return Long.toString(id++);
+    }
+
+    private Task19() {
+    }
+
+    public record ValidationError(String message) {
     }
 }

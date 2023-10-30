@@ -5,9 +5,18 @@ import java.util.Arrays;
 import java.util.List;
 import static edu.hw4.Animal.Type;
 import static edu.hw4.Animal.Sex;
+import static edu.hw4.Task7.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task7Test {
+    @Test
+    void getKthOldestAnimal_NullListGiven_ThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            getKthOldestAnimal(null, 2);
+        });
+    }
+
     @Test
     void getKthOldestAnimal_NotEmptyListOfAnimalsGiven_ReturnKthOldestAnimal() {
         // given
@@ -23,7 +32,7 @@ public class Task7Test {
         Animal expectedAnswer = new Animal("Snezhinka", Type.CAT, Sex.F, 2, 40, 4, false);
 
         // when
-        Animal actualAnswer = Task7.getKthOldestAnimal(animals, k);
+        Animal actualAnswer = getKthOldestAnimal(animals, k);
 
         // then
         assertThat(actualAnswer).isEqualTo(expectedAnswer);

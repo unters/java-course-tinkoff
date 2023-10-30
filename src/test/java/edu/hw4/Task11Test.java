@@ -7,8 +7,16 @@ import static edu.hw4.Animal.Type;
 import static edu.hw4.Animal.Sex;
 import static edu.hw4.Task11.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task11Test {
+    @Test
+    void getDangerousAnimals_NullListGiven_ThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            getDangerousAnimals(null);
+        });
+    }
+
     @Test
     void getDangerousAnimals_ListOfAnimalsGiven_ReturnExpectedAnswer() {
         // given

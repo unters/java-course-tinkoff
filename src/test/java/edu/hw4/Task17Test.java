@@ -7,8 +7,16 @@ import static edu.hw4.Animal.Type;
 import static edu.hw4.Animal.Sex;
 import static edu.hw4.Task17.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task17Test {
+    @Test
+    void doSpidersByteMoreOftenThanDogs_NullListGiven_ThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            doSpidersByteMoreOftenThanDogs(null);
+        });
+    }
+
     @Test
     void doSpidersByteMoreOftenThanDogs_ListOfAnimalsWithSpidersThatByteMoreOftenThanDogsGiven_ReturnTrue() {
         // given

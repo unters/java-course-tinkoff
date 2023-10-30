@@ -5,9 +5,18 @@ import java.util.Arrays;
 import java.util.List;
 import static edu.hw4.Animal.Type;
 import static edu.hw4.Animal.Sex;
+import static edu.hw4.Task2.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task2Test {
+    @Test
+    void getKHeaviestAnimals_NullListGiven_ThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            getKHeaviestAnimals(null, 0);
+        });
+    }
+
     @Test
     void getKHeaviestAnimals_ListOfAnimalsGiven_ReturnSortedList() {
         // given
@@ -27,7 +36,7 @@ public class Task2Test {
         );
 
         // when
-        List<Animal> actualAnswer = Task2.getKHeaviestAnimals(animals, k);
+        List<Animal> actualAnswer = getKHeaviestAnimals(animals, k);
 
         // then
         assertThat(actualAnswer).isEqualTo(expectedAnswer);

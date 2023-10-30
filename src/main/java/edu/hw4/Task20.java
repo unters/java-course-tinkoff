@@ -75,4 +75,7 @@ public class Task20 {
     private static String getNextId() {
         return Long.toString(id++);
     }
+
+    private Task20() {
+    }
 }

@@ -5,9 +5,18 @@ import java.util.Arrays;
 import java.util.List;
 import static edu.hw4.Animal.Type;
 import static edu.hw4.Animal.Sex;
+import static edu.hw4.Task10.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task10Test {
+    @Test
+    void filterAnimalsByAgeAndLegsCountMismatch_NullListGiven_ThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            filterAnimalsByAgeAndLegsCountMismatch(null);
+        });
+    }
+
     @Test
     void filterAnimalsByAgeAndLegsCountMismatch_NotEmptyListOfAnimalsGiven_ReturnExpectedAnswer() {
         // given
@@ -26,7 +35,7 @@ public class Task10Test {
         );
 
         // when
-        List<Animal> actualAnswer = Task10.filterAnimalsByAgeAndLegsCountMismatch(animals);
+        List<Animal> actualAnswer = filterAnimalsByAgeAndLegsCountMismatch(animals);
 
         // then
         assertThat(actualAnswer).isEqualTo(expectedAnswer);

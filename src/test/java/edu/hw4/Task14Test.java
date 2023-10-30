@@ -7,10 +7,18 @@ import static edu.hw4.Animal.Type;
 import static edu.hw4.Animal.Sex;
 import static edu.hw4.Task14.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task14Test {
     @Test
-    void getDangerousAnimals_ListOfAnimalsWithDogHeigherThanHeightGiven_ReturnTrue() {
+    void hasDogWithHeightGreaterOrEqualThanGivenHeight_NullListGiven_ThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            hasDogWithHeightGreaterOrEqualThanGivenHeight(null, 20);
+        });
+    }
+
+    @Test
+    void hasDogWithHeightGreaterOrEqualThanGivenHeight_ListOfAnimalsWithDogHigherThanHeightGiven_ReturnTrue() {
         // given
         int height = 100;
         List<Animal> animals = Arrays.asList(
@@ -24,7 +32,7 @@ public class Task14Test {
         boolean expectedAnswer = true;
 
         // when
-        boolean actualAnswer = isDogWithHeightGreaterOrEqualThanGivenHeight(animals, height);
+        boolean actualAnswer = hasDogWithHeightGreaterOrEqualThanGivenHeight(animals, height);
 
         // then
         assertThat(actualAnswer).isEqualTo(expectedAnswer);
@@ -45,7 +53,7 @@ public class Task14Test {
         boolean expectedAnswer = false;
 
         // when
-        boolean actualAnswer = isDogWithHeightGreaterOrEqualThanGivenHeight(animals, height);
+        boolean actualAnswer = hasDogWithHeightGreaterOrEqualThanGivenHeight(animals, height);
 
         // then
         assertThat(actualAnswer).isEqualTo(expectedAnswer);

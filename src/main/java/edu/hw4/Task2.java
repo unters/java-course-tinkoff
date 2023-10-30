@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Task2 {
-    /* Get not more than k the heaviest animals.  */
+    /* Get at most k heaviest animals.  */
     public static List<Animal> getKHeaviestAnimals(List<Animal> animals, int k) {
         if (animals == null) {
             throw new IllegalArgumentException("animals cannot be null");

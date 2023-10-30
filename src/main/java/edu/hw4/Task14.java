@@ -3,7 +3,7 @@ package edu.hw4;
 import java.util.List;
 
 public class Task14 {
-    public static boolean isDogWithHeightGreaterOrEqualThanGivenHeight(List<Animal> animals, int height) {
+    public static boolean hasDogWithHeightGreaterOrEqualThanGivenHeight(List<Animal> animals, int height) {
         if (animals == null) {
             throw new IllegalArgumentException("animals cannot be null");
         }

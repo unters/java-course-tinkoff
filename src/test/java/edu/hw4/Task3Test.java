@@ -7,9 +7,18 @@ import java.util.List;
 import java.util.Map;
 import static edu.hw4.Animal.Type;
 import static edu.hw4.Animal.Sex;
+import static edu.hw4.Task3.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task3Test {
+    @Test
+    void countAnimalsByTypes_NullListGiven_ThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            countAnimalsByTypes(null);
+        });
+    }
+
     @Test
     void countAnimalsByTypes_ListOfAnimalsGiven_ReturnMapWithTypeCount() {
         // given
@@ -28,7 +37,7 @@ public class Task3Test {
         expectedAnswer.put(Type.BIRD, 1);
 
         // when
-        Map<Type, Integer> actualAnswer = Task3.countAnimalsByTypes(animals);
+        Map<Type, Integer> actualAnswer = countAnimalsByTypes(animals);
 
         // then
         assertThat(actualAnswer).isEqualTo(expectedAnswer);

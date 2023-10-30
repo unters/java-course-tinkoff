@@ -21,4 +21,7 @@ public class Task18 {
             .filter(a -> (a.type() == Animal.Type.FISH))
             .max(Comparator.comparing(Animal::weight));
     }
+
+    private Task18() {
+    }
 }

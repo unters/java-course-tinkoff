@@ -6,9 +6,18 @@ import java.util.List;
 import java.util.Optional;
 import static edu.hw4.Animal.Type;
 import static edu.hw4.Animal.Sex;
+import static edu.hw4.Task8.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task8Test {
+    @Test
+    void getHeaviestAnimalWithLimitedHeight_NullListGiven_ThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            getHeaviestAnimalWithLimitedHeight(null, 120);
+        });
+    }
+
     @Test
     void getHeaviestAnimalWithLimitedHeight_NotEmptyListOfAnimalsGiven_ReturnHeaviestAnimal() {
         // given
@@ -24,7 +33,7 @@ public class Task8Test {
         Optional<Animal> expectedAnswer = Optional.of(new Animal("Bubble", Type.FISH, Sex.M, 1, 10, 1, false));
 
         // when
-        Optional<Animal> actualAnswer = Task8.getHeaviestAnimalWithLimitedHeight(animals, height);
+        Optional<Animal> actualAnswer = getHeaviestAnimalWithLimitedHeight(animals, height);
 
         // then
         assertThat(actualAnswer).isEqualTo(expectedAnswer);

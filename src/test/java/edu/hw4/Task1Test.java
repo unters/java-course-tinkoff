@@ -5,10 +5,18 @@ import java.util.Arrays;
 import java.util.List;
 import static edu.hw4.Animal.Type;
 import static edu.hw4.Animal.Sex;
-import static edu.hw4.Task1.sortByHeightAsc;
+import static edu.hw4.Task1.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task1Test {
+    @Test
+    void sortByHeightAsc_NullListGiven_ThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            sortByHeightAsc(null);
+        });
+    }
+
     @Test
     void sortByHeightAsc_ListOfAnimalsGiven_ReturnSortedList() {
         // given

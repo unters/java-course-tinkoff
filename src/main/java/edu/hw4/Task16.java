@@ -15,4 +15,7 @@ public class Task16 {
             .sorted(Comparator.comparing(Animal::type))
             .toList();
     }
+
+    private Task16() {
+    }
 }

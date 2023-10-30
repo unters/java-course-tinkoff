@@ -11,8 +11,16 @@ import static edu.hw4.Animal.Type;
 import static edu.hw4.Animal.Sex;
 import static edu.hw4.Task19.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task19Test {
+    @Test
+    void getValidationResults_NullListGiven_ThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            getValidationResults(null);
+        });
+    }
+
     @Test
     void getValidationResults_ListOfAnimalsGiven_ReturnExpectedAnswer() {
         // given

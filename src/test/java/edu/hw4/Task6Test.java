@@ -7,9 +7,18 @@ import java.util.List;
 import java.util.Map;
 import static edu.hw4.Animal.Type;
 import static edu.hw4.Animal.Sex;
+import static edu.hw4.Task6.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task6Test {
+    @Test
+    void getHeaviestAnimalsByType_NullListGiven_ThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            getHeaviestAnimalsByType(null);
+        });
+    }
+
     @Test
     void getHeaviestAnimalsByType_NotEmptyListOfAnimalsGiven_ReturnExpectedAnswer() {
         // given
@@ -25,7 +34,7 @@ public class Task6Test {
         expectedAnswer.put(Type.BIRD, new Animal("Ara", Type.BIRD, Sex.M, 3, 81, 1, false));
 
         // when
-        Map<Type, Animal> actualAnswer = Task6.getHeaviestAnimalsByType(animals);
+        Map<Type, Animal> actualAnswer = getHeaviestAnimalsByType(animals);
 
         // then
         assertThat(actualAnswer).isEqualTo(expectedAnswer);

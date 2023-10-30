@@ -7,8 +7,16 @@ import static edu.hw4.Animal.Type;
 import static edu.hw4.Animal.Sex;
 import static edu.hw4.Task13.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task13Test {
+    @Test
+    void getAnimalsWithComplexNames_NullListGiven_ThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            getAnimalsWithComplexNames(null);
+        });
+    }
+
     @Test
     void getAnimalsWithComplexNames_ListOfAnimalsGiven_ReturnExpectedAnswer() {
         // given

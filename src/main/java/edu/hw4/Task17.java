@@ -24,4 +24,7 @@ public class Task17 {
 
         return mp.get(Animal.Type.DOG).compareTo(mp.get(Animal.Type.SPIDER)) < 0;
     }
+
+    private Task17() {
+    }
 }

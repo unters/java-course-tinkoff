@@ -7,8 +7,16 @@ import static edu.hw4.Animal.Type;
 import static edu.hw4.Animal.Sex;
 import static edu.hw4.Task15.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task15Test {
+    @Test
+    void getTotalWeightOfAnimalsWithGivenAge_NullListGiven_ThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            getTotalWeightOfAnimalsWithGivenAge(null, 0, 100);
+        });
+    }
+
     @Test
     void getTotalWeightOfAnimalsWithGivenAge_ListOfAnimalsGiven_ReturnExpectedAnswer() {
         // given
