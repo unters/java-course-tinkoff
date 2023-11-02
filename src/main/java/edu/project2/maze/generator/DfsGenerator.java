@@ -17,7 +17,7 @@ public class DfsGenerator implements Generator {
         {-2, 0}, {0, 2}, {2, 0}, {0, -2}
     };
 
-    public static Generator getInstance() {
+    public static DfsGenerator getInstance() {
         return DFS_GENERATOR_INSTANCE;
     }
 

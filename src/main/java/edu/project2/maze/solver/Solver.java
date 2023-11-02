@@ -6,5 +6,5 @@ import java.util.Optional;
 import static edu.project2.maze.Maze.Coordinate;
 
 public interface Solver {
-    Optional<List<Coordinate>> solve(Maze maze);
+    Optional<List<Coordinate>> solve(Maze maze, Coordinate start, Coordinate end);
 }
