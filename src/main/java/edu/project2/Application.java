@@ -4,7 +4,6 @@ import edu.project2.maze.Maze;
 import edu.project2.maze.generator.DfsGenerator;
 import edu.project2.maze.generator.Generator;
 import edu.project2.maze.renderer.CliAnsiRenderer;
-import edu.project2.maze.renderer.CliAsciiRenderer;
 import edu.project2.maze.renderer.Renderer;
 import edu.project2.maze.solver.BfsSolver;
 import edu.project2.maze.solver.Solver;
@@ -12,7 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Optional;
-import static edu.project2.maze.Maze.Cell;
 import static edu.project2.maze.Maze.Coordinate;
 
 final class Application {
@@ -26,7 +24,7 @@ final class Application {
     static void run() {
         Generator generator = DfsGenerator.getInstance();
         Solver solver = BfsSolver.getInstance();
-        Renderer renderer = new CliAnsiRenderer();
+        Renderer renderer = CliAnsiRenderer.getInstance();
 
         Maze maze = generator.generate(DEFAULT_HEIGHT, DEFAULT_WIDTH);
         Optional<List<Coordinate>> path = solver.solve(maze, DEFAULT_START, DEFAULT_END);

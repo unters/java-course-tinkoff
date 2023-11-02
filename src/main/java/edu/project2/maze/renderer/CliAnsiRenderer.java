@@ -4,10 +4,17 @@ import edu.project2.maze.Maze;
 import java.util.List;
 import static edu.project2.maze.Maze.Coordinate;
 
+/* Singleton.  */
 public class CliAnsiRenderer implements Renderer {
+    private static final CliAnsiRenderer CLI_ANSI_RENDERER = new CliAnsiRenderer();
+
     private static final String PASSAGE_CELL = "  ";
     private static final String WALL_CELL = "\033[40m  \033[0m";
     private static final String PATH_CELL = "\033[41m  \033[0m";
+
+    public static CliAnsiRenderer getInstance() {
+        return CLI_ANSI_RENDERER;
+    }
 
     @Override
     public void render(Maze maze) {
@@ -46,5 +53,8 @@ public class CliAnsiRenderer implements Renderer {
             }
             System.out.println();
         }
+    }
+
+    private CliAnsiRenderer() {
     }
 }

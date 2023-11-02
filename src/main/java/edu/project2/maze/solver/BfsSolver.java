@@ -27,6 +27,10 @@ public class BfsSolver implements Solver {
             throw new IllegalArgumentException("start and finish must be located at passages");
         }
 
+        if (start.equals(end)) {
+            return Optional.of(List.of(start));
+        }
+
         int height = maze.height();
         int width = maze.width();
         long[][] distance = new long[height][width];
@@ -47,7 +51,7 @@ public class BfsSolver implements Solver {
                 int yAdj = y + step[0];
                 int xAdj = x + step[1];
                 if (yAdj >= 0 && yAdj < height && xAdj >= 0 && xAdj < width &&
-                    maze.cellAt(yAdj, xAdj).equals(Cell.PASSAGE) && distance[yAdj][xAdj] > distance[y][x] + 1) {
+                    maze.getCellAt(yAdj, xAdj).equals(Cell.PASSAGE) && distance[yAdj][xAdj] > distance[y][x] + 1) {
                     distance[yAdj][xAdj] = distance[y][x] + 1;
                     previous[yAdj][xAdj] = coordinate;
                     queue.addLast(new Coordinate(yAdj, xAdj));

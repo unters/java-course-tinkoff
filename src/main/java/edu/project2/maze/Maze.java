@@ -1,5 +1,7 @@
 package edu.project2.maze;
 
+import java.util.Arrays;
+
 public final class Maze {
     private static final String COORDINATE_OUT_OF_GRID_MESSAGE = "given coordinate is out of grid";
     private static final String INVALID_HEIGHT_AND_WIDTH = "height and width must be greater than 2";
@@ -14,9 +16,12 @@ public final class Maze {
             throw new IllegalArgumentException(INVALID_HEIGHT_AND_WIDTH);
         }
 
-        grid = new Cell[height][width];
         this.height = height;
         this.width = width;
+        grid = new Cell[height][width];
+        for (int y = 0; y < height; ++y) {
+            Arrays.fill(grid[y], Cell.WALL);
+        }
     }
 
     public int height() {
@@ -27,7 +32,7 @@ public final class Maze {
         return width;
     }
 
-    public Cell cellAt(int y, int x) {
+    public Cell getCellAt(int y, int x) {
         if (y < 0 || x < 0 || y >= height || x >= width) {
             throw new IllegalArgumentException(COORDINATE_OUT_OF_GRID_MESSAGE);
         }
@@ -39,11 +44,15 @@ public final class Maze {
         };
     }
 
-    public Cell cellAt(Coordinate coord) {
-        return cellAt(coord.y(), coord.x());
+    public Cell getCellAt(Coordinate coordinate) {
+        return getCellAt(coordinate.y(), coordinate.x());
     }
 
     public void setCellAt(int y, int x, Cell cell) {
+        if (y < 0 || x < 0 || y >= height || x >= width) {
+            throw new IllegalArgumentException(COORDINATE_OUT_OF_GRID_MESSAGE);
+        }
+
         if (cell == null) {
             throw new IllegalArgumentException(NULL_CELL_MESSAGE);
         }
