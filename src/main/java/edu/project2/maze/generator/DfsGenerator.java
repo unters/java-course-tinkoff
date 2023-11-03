@@ -2,8 +2,8 @@ package edu.project2.maze.generator;
 
 import edu.project2.maze.Maze;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import static edu.project2.maze.Maze.Cell;
@@ -13,19 +13,12 @@ import static edu.project2.maze.Maze.Coordinate;
 public class DfsGenerator implements Generator {
     private static final DfsGenerator DFS_GENERATOR_INSTANCE = new DfsGenerator();
 
-    private static final int[][] steps = new int[][] {
+    private static final int[][] STEPS = new int[][] {
         {-2, 0}, {0, 2}, {2, 0}, {0, -2}
     };
 
     public static DfsGenerator getInstance() {
         return DFS_GENERATOR_INSTANCE;
-    }
-
-    @Override
-    public Maze generate(int height, int width) {
-        Random random = new Random();
-        long seed = random.nextLong();
-        return generate(height, width, seed);
     }
 
     @Override
@@ -49,7 +42,7 @@ public class DfsGenerator implements Generator {
 
             /* Find unvisited "adjacent" passages.  */
             List<int[]> nextSteps = new ArrayList<>();
-            for (int[] step : steps) {
+            for (int[] step : STEPS) {
                 int yNew = y + step[0];
                 int xNew = x + step[1];
                 if (yNew >= 0 && yNew < height && xNew >= 0 && xNew < width && !visited[yNew][xNew]) {

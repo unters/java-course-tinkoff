@@ -13,7 +13,7 @@ import static edu.project2.maze.Maze.Coordinate;
 public class BfsSolver implements Solver {
     private static final BfsSolver BFS_SOLVER_INSTANCE = new BfsSolver();
 
-    private static final int[][] steps = new int[][] {
+    private static final int[][] STEPS = new int[][] {
         {-1, 0}, {0, 1}, {1, 0}, {0, -1}
     };
 
@@ -47,11 +47,11 @@ public class BfsSolver implements Solver {
             int y = coordinate.y();
             int x = coordinate.x();
 
-            for (int[] step : steps) {
+            for (int[] step : STEPS) {
                 int yAdj = y + step[0];
                 int xAdj = x + step[1];
-                if (yAdj >= 0 && yAdj < height && xAdj >= 0 && xAdj < width &&
-                    maze.getCellAt(yAdj, xAdj).equals(Cell.PASSAGE) && distance[yAdj][xAdj] > distance[y][x] + 1) {
+                if (yAdj >= 0 && yAdj < height && xAdj >= 0 && xAdj < width
+                    && maze.getCellAt(yAdj, xAdj).equals(Cell.PASSAGE) && distance[yAdj][xAdj] > distance[y][x] + 1) {
                     distance[yAdj][xAdj] = distance[y][x] + 1;
                     previous[yAdj][xAdj] = coordinate;
                     queue.addLast(new Coordinate(yAdj, xAdj));

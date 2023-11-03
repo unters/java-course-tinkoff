@@ -5,10 +5,10 @@ public class GeneratorFactory {
         return getDefaultGenerator();
     }
 
-    @SuppressWarnings("SwitchStatementWithTooFewBranches")
     public static Generator getGenerator(String generatorName) {
         return switch (generatorName) {
             case "dfs" -> getDfsGenerator();
+            case "eller" -> getEllerGenerator();
             default -> throw new IllegalArgumentException("invalid generator name");
         };
     }
@@ -19,6 +19,10 @@ public class GeneratorFactory {
 
     private static DfsGenerator getDfsGenerator() {
         return DfsGenerator.getInstance();
+    }
+
+    private static EllerGenerator getEllerGenerator() {
+        return EllerGenerator.getInstance();
     }
 
     private GeneratorFactory() {

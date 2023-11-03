@@ -5,6 +5,7 @@ import java.util.List;
 import static edu.project2.maze.Maze.Coordinate;
 
 /* Singleton.  */
+@SuppressWarnings("RegexpSinglelineJava")
 public class CliAnsiRenderer implements Renderer {
     private static final CliAnsiRenderer CLI_ANSI_RENDERER = new CliAnsiRenderer();
 
