@@ -8,6 +8,7 @@ import java.util.Random;
 import static edu.project2.maze.Maze.Cell;
 
 /* Singleton.  */
+/* http://www.neocomputer.org/projects/eller.html  */
 public class EllerGenerator implements Generator {
     private static final EllerGenerator ELLER_GENERATOR_INSTANCE = new EllerGenerator();
 

@@ -47,7 +47,7 @@ public class CliAnsiRenderer implements Renderer {
             grid[coordinate.y()][coordinate.x()] = PATH_CELL;
         }
 
-        /* Print grid.  */
+        /* Print rendered data.  */
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
                 System.out.print(grid[y][x]);

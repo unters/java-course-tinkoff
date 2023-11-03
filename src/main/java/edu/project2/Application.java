@@ -12,7 +12,7 @@ import java.util.Optional;
 import static edu.project2.maze.Maze.Coordinate;
 
 final class Application {
-    private static final int DEFAULT_HEIGHT = 3;
+    private static final int DEFAULT_HEIGHT = 31;
     private static final int DEFAULT_WIDTH = 31;
     private static final Coordinate DEFAULT_START = new Coordinate(1, 1);
     private static final Coordinate DEFAULT_END = new Coordinate(DEFAULT_HEIGHT - 2, DEFAULT_WIDTH - 2);
@@ -20,7 +20,7 @@ final class Application {
     @SuppressWarnings("RegexpSinglelineJava")
     static void run() {
         /* Configure desired generator, solver and renderer.  */
-        Generator generator = GeneratorFactory.getGenerator("eller");
+        Generator generator = GeneratorFactory.getGenerator("prim");
         Solver solver = SolverFactory.getSolver();
         Renderer renderer = RendererFactory.getRenderer();
 

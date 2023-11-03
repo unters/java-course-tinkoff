@@ -9,6 +9,7 @@ public class GeneratorFactory {
         return switch (generatorName) {
             case "dfs" -> getDfsGenerator();
             case "eller" -> getEllerGenerator();
+            case "prim" -> getPrimGenerator();
             default -> throw new IllegalArgumentException("invalid generator name");
         };
     }
@@ -23,6 +24,10 @@ public class GeneratorFactory {
 
     private static EllerGenerator getEllerGenerator() {
         return EllerGenerator.getInstance();
+    }
+
+    private static PrimGenerator getPrimGenerator() {
+        return PrimGenerator.getInstance();
     }
 
     private GeneratorFactory() {
