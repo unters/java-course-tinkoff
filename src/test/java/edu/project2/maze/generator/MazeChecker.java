@@ -11,7 +11,7 @@ public class MazeChecker {
     };
 
     /* Check if any cell with both coordinates odd is accessible from any other cell with both coordinates odd.  */
-    static boolean check(Maze maze) {
+    public static boolean check(Maze maze) {
         int height = maze.height();
         int width = maze.width();
 
