@@ -1,7 +1,9 @@
 package edu.project2.maze.generator;
 
+import edu.project2.maze.Maze;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -22,5 +24,12 @@ public class DfsGeneratorTest {
         assertDoesNotThrow(() -> {
             dfsGenerator.generate(height, width);
         });
+    }
+
+    @ParameterizedTest
+    @CsvSource({"5, 5", "15, 5", "5, 21", "51, 47", "189, 211"})
+    void generate_ValidArgumentsGiven_AllCellsAreReachableFromAnyCell(int height, int width) {
+        Maze maze = dfsGenerator.generate(height, width);
+        assertThat(MazeChecker.check(maze)).isTrue();
     }
 }

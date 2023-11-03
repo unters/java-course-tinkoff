@@ -17,6 +17,7 @@ final class Application {
     private static final Coordinate DEFAULT_START = new Coordinate(1, 1);
     private static final Coordinate DEFAULT_END = new Coordinate(DEFAULT_HEIGHT - 2, DEFAULT_WIDTH - 2);
 
+    /* Demo run() implementation. It could be modified to read parameters from terminal or from config file.  */
     @SuppressWarnings("RegexpSinglelineJava")
     static void run() {
         /* Configure desired generator, solver and renderer.  */
