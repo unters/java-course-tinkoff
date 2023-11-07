@@ -7,7 +7,7 @@ public class Task4 {
      * can also contain english letters in lower or upper case, digits and underscores.  */
     private static final String PASSWORD_REGEX = "^(\\w*[~!@#$%^&*|]+\\w*)+$";
 
-    private static final String NULL_STRING_GIVEN_MESSAGE = "dateString cannot be null";
+    private static final String NULL_STRING_GIVEN_MESSAGE = "password cannot be null";
 
     public static boolean isPasswordValid(String password) {
         if (password == null) {

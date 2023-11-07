@@ -1,5 +1,6 @@
 package edu.hw5;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -65,6 +66,13 @@ public class Task1Test {
                 ), Duration.ofMinutes(2))
             );
         }
+    }
+
+    @Test
+    void calculateAverageTime_NullParametersListGiven_ThrowIllegalArgumentsException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calculateAverageTime(null);
+        });
     }
 
     @ParameterizedTest

@@ -17,14 +17,20 @@ public class Task1 {
     private static final Pattern PERIOD_PATTERN = Pattern.compile(PERIOD_REGEX);
     private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern(DATETIME_FORMAT);
 
+    private static final String PERIODS_LIST_IS_NULL_MESSAGE =
+        "periodsList cannot be null";
     private static final String PARSING_FAILED_MESSAGE =
         "given string does not match the required pattern";
     private static final String INVALID_PERIOD_DATA_MESSAGE =
         "invalid period - session could not begin before it has ended";
 
-    public static Duration calculateAverageTime(List<String> periodStrings) {
+    public static Duration calculateAverageTime(List<String> periodsList) {
+        if (periodsList == null) {
+            throw new IllegalArgumentException(PERIODS_LIST_IS_NULL_MESSAGE);
+        }
+
         long totalMinutes = 0;
-        for (String periodString : periodStrings) {
+        for (String periodString : periodsList) {
             Matcher matcher = PERIOD_PATTERN.matcher(periodString);
             if (!matcher.matches()) {
                 throw new IllegalArgumentException(PARSING_FAILED_MESSAGE);
@@ -40,7 +46,7 @@ public class Task1 {
             totalMinutes += sessionDuration.toMinutes();
         }
 
-        return Duration.ofMinutes(totalMinutes).dividedBy(periodStrings.size());
+        return Duration.ofMinutes(totalMinutes).dividedBy(periodsList.size());
     }
 
     private Task1() {

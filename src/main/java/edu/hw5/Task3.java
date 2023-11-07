@@ -29,6 +29,7 @@ public class Task3 {
         if (dateString == null) {
             throw new IllegalArgumentException(NULL_STRING_GIVEN_MESSAGE);
         }
+
         return DATE_PARSER.parse(dateString);
     }
 
