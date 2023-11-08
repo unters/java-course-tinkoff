@@ -8,7 +8,7 @@ public class Task6 {
             throw new IllegalArgumentException("neither s nor t can be null");
         }
 
-        return Pattern.matches("^.*" + t + ".*$", s);
+        return Pattern.matches("^.*" + Pattern.quote(t) + ".*$", s);
     }
 
     private Task6() {
