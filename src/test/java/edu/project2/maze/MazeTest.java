@@ -11,7 +11,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static edu.project2.maze.Maze.Cell;
-import static edu.project2.maze.Maze.Coordinate;
 
 public class MazeTest {
     private static final class GetCellAtInvalidArgumentsProvider implements ArgumentsProvider {

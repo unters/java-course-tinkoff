@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import static edu.project2.maze.Maze.Cell;
-import static edu.project2.maze.Maze.Coordinate;
+
+import edu.project2.maze.Coordinate;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

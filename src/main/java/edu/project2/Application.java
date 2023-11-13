@@ -1,5 +1,6 @@
 package edu.project2;
 
+import edu.project2.maze.Coordinate;
 import edu.project2.maze.Maze;
 import edu.project2.maze.generator.Generator;
 import edu.project2.maze.generator.GeneratorFactory;
@@ -9,7 +10,6 @@ import edu.project2.maze.solver.Solver;
 import edu.project2.maze.solver.SolverFactory;
 import java.util.List;
 import java.util.Optional;
-import static edu.project2.maze.Maze.Coordinate;
 
 final class Application {
     private static final int DEFAULT_HEIGHT = 31;

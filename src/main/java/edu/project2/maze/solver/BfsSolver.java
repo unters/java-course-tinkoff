@@ -1,5 +1,6 @@
 package edu.project2.maze.solver;
 
+import edu.project2.maze.Coordinate;
 import edu.project2.maze.Maze;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,10 +9,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import static edu.project2.maze.Maze.Cell;
-import static edu.project2.maze.Maze.Coordinate;
 
 public class BfsSolver implements Solver {
     private static final BfsSolver BFS_SOLVER_INSTANCE = new BfsSolver();
+
+    private BfsSolver() {
+    }
 
     private static final int[][] STEPS = new int[][] {
         {-1, 0}, {0, 1}, {1, 0}, {0, -1}
@@ -31,8 +34,8 @@ public class BfsSolver implements Solver {
             return Optional.of(List.of(start));
         }
 
-        int height = maze.height();
-        int width = maze.width();
+        int height = maze.getHeight();
+        int width = maze.getWidth();
         long[][] distance = new long[height][width];
         Coordinate[][] previous = new Coordinate[height][width];
         for (int i = 0; i < height; ++i) {
@@ -71,8 +74,5 @@ public class BfsSolver implements Solver {
         }
 
         return Optional.of(answer);
-    }
-
-    private BfsSolver() {
     }
 }

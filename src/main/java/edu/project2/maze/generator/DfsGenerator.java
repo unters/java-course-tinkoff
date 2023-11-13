@@ -1,5 +1,6 @@
 package edu.project2.maze.generator;
 
+import edu.project2.maze.Coordinate;
 import edu.project2.maze.Maze;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -7,15 +8,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import static edu.project2.maze.Maze.Cell;
-import static edu.project2.maze.Maze.Coordinate;
 
 /* Singleton.  */
 public class DfsGenerator implements Generator {
     private static final DfsGenerator DFS_GENERATOR_INSTANCE = new DfsGenerator();
 
+    private DfsGenerator() {
+    }
+
     private static final int[][] STEPS = new int[][] {
         {-2, 0}, {0, 2}, {2, 0}, {0, -2}
     };
+
 
     public static DfsGenerator getInstance() {
         return DFS_GENERATOR_INSTANCE;
@@ -83,8 +87,5 @@ public class DfsGenerator implements Generator {
         }
 
         return maze;
-    }
-
-    private DfsGenerator() {
     }
 }

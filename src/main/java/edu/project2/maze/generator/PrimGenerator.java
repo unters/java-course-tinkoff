@@ -1,15 +1,18 @@
 package edu.project2.maze.generator;
 
+import edu.project2.maze.Coordinate;
 import edu.project2.maze.Maze;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import static edu.project2.maze.Maze.Cell;
-import static edu.project2.maze.Maze.Coordinate;
 
 public class PrimGenerator implements Generator {
     private static final PrimGenerator PRIM_GENERATOR_INSTANCE = new PrimGenerator();
+
+    private PrimGenerator() {
+    }
 
     private static final int[][] STEPS = new int[][] {
         {-2, 0}, {0, 2}, {2, 0}, {0, -2}
@@ -66,8 +69,5 @@ public class PrimGenerator implements Generator {
         }
 
         return maze;
-    }
-
-    private PrimGenerator() {
     }
 }

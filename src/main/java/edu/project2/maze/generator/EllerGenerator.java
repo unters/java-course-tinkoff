@@ -12,6 +12,9 @@ import static edu.project2.maze.Maze.Cell;
 public class EllerGenerator implements Generator {
     private static final EllerGenerator ELLER_GENERATOR_INSTANCE = new EllerGenerator();
 
+    private EllerGenerator() {
+    }
+
     private static final int MIN_HEIGHT = 5;
     private static final int MIN_WIDTH = 5;
 
@@ -52,7 +55,7 @@ public class EllerGenerator implements Generator {
     }
 
     private int[] generateFirstRow(Maze maze, Random random) {
-        int[] equivClass = new int[maze.width() / 2];
+        int[] equivClass = new int[maze.getWidth() / 2];
         Arrays.setAll(equivClass, i -> i + 1);
         for (int i = 0; i < equivClass.length - 1; ++i) {
             if (random.nextBoolean()) {
@@ -95,7 +98,7 @@ public class EllerGenerator implements Generator {
     private int[] generateMiddleRows(Maze maze, int[] equivClass, Random random) {
         int classCounter = equivClass.length;
         int[] prevEquivClass = equivClass;
-        for (int y = 3; y < maze.height() - 2; y += 2) {
+        for (int y = 3; y < maze.getHeight() - 2; y += 2) {
             int[] currEquivClass = Arrays.copyOf(prevEquivClass, prevEquivClass.length);
             for (int i = 0; i < currEquivClass.length; ++i) {
                 if (!maze.isPassage(y - 1, 2 * i + 1)) {
@@ -152,14 +155,14 @@ public class EllerGenerator implements Generator {
 
         int[] currEquivClass = Arrays.copyOf(prevEquivClass, prevEquivClass.length);
         for (int i = 0; i < currEquivClass.length; ++i) {
-            if (!maze.isPassage(maze.height() - 3, 2 * i + 1)) {
+            if (!maze.isPassage(maze.getHeight() - 3, 2 * i + 1)) {
                 currEquivClass[i] = ++maxEquivClass;
             }
         }
 
         for (int i = 0; i < prevEquivClass.length - 1; ++i) {
             if (currEquivClass[i + 1] == currEquivClass[i] || random.nextBoolean()) {
-                maze.setCellAt(maze.height() - 2, 2 * i + 2, Cell.WALL);
+                maze.setCellAt(maze.getHeight() - 2, 2 * i + 2, Cell.WALL);
             } else {
                 currEquivClass[i + 1] = currEquivClass[i];
             }
@@ -167,11 +170,8 @@ public class EllerGenerator implements Generator {
 
         for (int i = 0; i < currEquivClass.length - 1; ++i) {
             if (currEquivClass[i] != currEquivClass[i + 1]) {
-                maze.setCellAt(maze.height() - 2,  2 * i + 2, Cell.PASSAGE);
+                maze.setCellAt(maze.getHeight() - 2,  2 * i + 2, Cell.PASSAGE);
             }
         }
-    }
-
-    private EllerGenerator() {
     }
 }

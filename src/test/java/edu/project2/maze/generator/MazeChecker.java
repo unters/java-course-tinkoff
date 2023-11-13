@@ -3,7 +3,8 @@ package edu.project2.maze.generator;
 import edu.project2.maze.Maze;
 import java.util.Deque;
 import java.util.LinkedList;
-import static edu.project2.maze.Maze.Coordinate;
+
+import edu.project2.maze.Coordinate;
 
 public class MazeChecker {
     private static final int[][] steps = new int[][] {
@@ -12,17 +13,17 @@ public class MazeChecker {
 
     /* Check if any cell with both coordinates odd is accessible from any other cell with both coordinates odd.  */
     public static boolean check(Maze maze) {
-        int height = maze.height();
-        int width = maze.width();
+        int height = maze.getHeight();
+        int width = maze.getWidth();
 
         Deque<Coordinate> queue = new LinkedList<>();
         boolean[][] visited = new boolean[height][width];
 
         /* All implemented maze generators generate mazes that are guaranteed to have passages at both coordinates
          * odd.  */
-        queue.addLast(new Maze.Coordinate(1, 1));
+        queue.addLast(new Coordinate(1, 1));
         while (!queue.isEmpty()) {
-            Maze.Coordinate coordinate = queue.pollFirst();
+            Coordinate coordinate = queue.pollFirst();
             int y = coordinate.y();
             int x = coordinate.x();
             visited[y][x] = true;
