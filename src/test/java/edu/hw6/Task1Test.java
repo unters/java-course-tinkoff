@@ -1,8 +1,6 @@
 package edu.hw6;
 
 import edu.hw6.task1.DiskMap;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,8 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 /* DiskMap tests.  */
 public class Task1Test {
-    private static final Logger LOGGER = LogManager.getLogger();
-    private static final String FOLDER = System.getProperty("user.dir") + "/src/test/resources/edu/hw6";
+    private static final String FOLDER = System.getProperty("user.dir") + "/src/test/resources/edu/hw6/task1";
 
     private static final class PutNonExistingKeyArgumentsProvider implements ArgumentsProvider {
         @Override
@@ -84,7 +81,6 @@ public class Task1Test {
         }
 
         Files.createDirectory(currentTestFolder);
-//        LOGGER.info("Test: " + currentTestFolder.toString());
 
         assertDoesNotThrow(() -> {
             new DiskMap(currentTestFolder);
@@ -104,7 +100,6 @@ public class Task1Test {
 
         Path previousDiskMapStorage = Paths.get(currentTestFolder.toString(), DiskMap.STORAGE_FOLDER_NAME);
         Files.createDirectory(previousDiskMapStorage);
-//        LOGGER.info("Test: " + previousDiskMapStorage.toString());
 
         Path pathToPreviousDiskMapEntry = Paths.get(previousDiskMapStorage.toString(), "PreviousKey");
         Files.createFile(pathToPreviousDiskMapEntry);
@@ -223,7 +218,6 @@ public class Task1Test {
         }
 
         Files.createDirectory(currentTestFolder);
-//        LOGGER.info("Test: " + currentTestFolder.toString());
         return new DiskMap(currentTestFolder);
     }
 
@@ -234,7 +228,6 @@ public class Task1Test {
         }
 
         Files.createDirectory(currentTestFolder);
-//        LOGGER.info("Test: " + currentTestFolder.toString());
         DiskMap diskMap = new DiskMap(currentTestFolder);
         diskMap.put("Super", "Secret");
         return diskMap;
@@ -247,7 +240,6 @@ public class Task1Test {
         }
 
         Files.createDirectory(currentTestFolder);
-//        LOGGER.info("Test: " + currentTestFolder.toString());
         DiskMap diskMap = new DiskMap(currentTestFolder);
         diskMap.put("Ilai", "Vance");
         diskMap.put("Alyx", "Vance");
