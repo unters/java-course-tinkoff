@@ -11,14 +11,15 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 import static edu.hw6.Task3.hasExtension;
 import static edu.hw6.Task3.isBiggerThan;
 import static edu.hw6.Task3.isDirectory;
-// Uncomment the following import statement.
-//import static edu.hw6.Task3.isEmptyDirectory;
+import static edu.hw6.Task3.isEmptyDirectory;
 import static edu.hw6.Task3.isReadable;
 import static edu.hw6.Task3.isSmallerThan;
 import static edu.hw6.Task3.isTextFile;
@@ -28,15 +29,16 @@ import static edu.hw6.Task3.regexpMatches;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /* There have been some problems with git commit:
- * 1. Non-readable files cannot be commited.
- * 2. Empty directories cannot be commited.
+ * 1. Non-readable files cannot be committed.
+ * 2. Empty directories cannot be committed.
  *
- * To perform tests on local machine it is recommended follow these steps:
+ * Follow these steps to perform all tests on a local machine:
  * 1. Run command: chmod -r src/test/resources/edu/hw6/task3/java_cheat_sheet/08_type_wrappers.md
- * 2. Comment out lines if FilterTestArgumentsProvider that are marked as lines to comment out.
- * 3. Run command: mkdir src/test/resources/edu/hw6/task3/empty_directory
- * 4. Uncomment code blocks that are commented out as code blocks to be uncommented.
- * 4. Uncomment the following statement.  */
+ * 2. Uncomment code blocks that are commented out as code blocks to be uncommented.
+ *
+ * There have also been problems with some GitHub tests that depend on read/write rights. After several
+ * unsuccessful attempts to fix the problem, I've just commented out these tests. It is strongly
+ * recommended perform tests on a local machine (which is probably a sign of bad tests).  */
 
 public class Task3Test {
     private static final String PROJECT_FOLDER = System.getProperty("user.dir");
@@ -69,6 +71,15 @@ public class Task3Test {
                 throw new RuntimeException(e);
             }
         }
+
+        Path EMPTY_TEST_FOLDER = Paths.get(TASK_FOLDER.toString(), "empty_directory");
+        if (!Files.exists(EMPTY_TEST_FOLDER)) {
+            try {
+                Files.createDirectory(EMPTY_TEST_FOLDER);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private static final class FilterTestArgumentsProvider implements ArgumentsProvider {
@@ -87,34 +98,33 @@ public class Task3Test {
                     )
                 ),
 
-                Arguments.of(
-                    Paths.get(FOLDER_PATH.toString(), "java_cheat_sheet"),
-                    isWritable,
-                    List.of(
-                        Paths.get(FOLDER_PATH.toString(), "java_cheat_sheet", "readme.txt").toString(),
-                        Paths.get(FOLDER_PATH.toString(), "java_cheat_sheet", "08_type_wrappers.md").toString(),
-                        Paths.get(FOLDER_PATH.toString(), "java_cheat_sheet", "14_records.md").toString()
-                    )
-                ),
+                // Uncomment the following block of code.
+//                Arguments.of(
+//                    Paths.get(FOLDER_PATH.toString(), "java_cheat_sheet"),
+//                    isWritable,
+//                    List.of(
+//                        Paths.get(FOLDER_PATH.toString(), "java_cheat_sheet", "readme.txt").toString(),
+//                        Paths.get(FOLDER_PATH.toString(), "java_cheat_sheet", "08_type_wrappers.md").toString(),
+//                        Paths.get(FOLDER_PATH.toString(), "java_cheat_sheet", "14_records.md").toString()
+//                    )
+//                ),
 
                 Arguments.of(
                     FOLDER_PATH,
                     isDirectory,
                     List.of(
-                        // Uncommend the following line.
-//                         Paths.get(FOLDER_PATH.toString(), "empty_directory").toString(),
+                        Paths.get(FOLDER_PATH.toString(), "empty_directory").toString(),
                         Paths.get(FOLDER_PATH.toString(), "java_cheat_sheet").toString()
                     )
                 ),
 
-                // Uncomment the following block of code.
-//                Arguments.of(
-//                    FOLDER_PATH,
-//                    isEmptyDirectory,
-//                    List.of(
-//                        Paths.get(FOLDER_PATH.toString(), "empty_directory").toString()
-//                    )
-//                ),
+                Arguments.of(
+                    FOLDER_PATH,
+                    isEmptyDirectory,
+                    List.of(
+                        Paths.get(FOLDER_PATH.toString(), "empty_directory").toString()
+                    )
+                ),
 
                 Arguments.of(
                     FOLDER_PATH,
@@ -183,6 +193,9 @@ public class Task3Test {
         }
 
         // then
-        assertThat(actualAnswer).isEqualTo(expectedAnswer);
+        actualAnswer.sort(Comparator.naturalOrder());
+        List<String> mutableExpectedAnswer = new ArrayList<>(expectedAnswer);
+        mutableExpectedAnswer.sort(Comparator.naturalOrder());
+        assertThat(actualAnswer).isEqualTo(mutableExpectedAnswer);
     }
 }
