@@ -39,8 +39,37 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
  * 4. Uncomment the following statement.  */
 
 public class Task3Test {
-    private static final Path FOLDER_PATH =
-        Paths.get(System.getProperty("user.dir"), "src/test/resources/edu/hw6/task3");
+    private static final String PROJECT_FOLDER = System.getProperty("user.dir");
+    private static final Path FOLDER_PATH = Paths.get(PROJECT_FOLDER, "src/test/resources/edu/hw6/task3");
+
+    static {
+        Path EDU_FOLDER = Paths.get(PROJECT_FOLDER, "src", "test", "resources", "edu");
+        if (!Files.exists(EDU_FOLDER)) {
+            try {
+                Files.createDirectory(EDU_FOLDER);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        Path HOMEWORK_FOLDER = Paths.get(EDU_FOLDER.toString(), "hw6");
+        if (!Files.exists(HOMEWORK_FOLDER)) {
+            try {
+                Files.createDirectory(HOMEWORK_FOLDER);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        Path TASK_FOLDER = Paths.get(HOMEWORK_FOLDER.toString(), "task3");
+        if (!Files.exists(TASK_FOLDER)) {
+            try {
+                Files.createDirectory(TASK_FOLDER);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     private static final class FilterTestArgumentsProvider implements ArgumentsProvider {
         @Override
