@@ -1,9 +1,11 @@
 package edu.hw7;
 
 import edu.hw7.task1.Counter;
+import lombok.experimental.UtilityClass;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+@UtilityClass
 public class Task1 {
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -42,8 +44,5 @@ public class Task1 {
         } catch (InterruptedException e) {
             LOGGER.info(e.getMessage());
         }
-    }
-
-    private Task1() {
     }
 }

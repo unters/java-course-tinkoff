@@ -2,8 +2,10 @@ package edu.hw7;
 
 import java.math.BigInteger;
 import java.util.stream.IntStream;
+import lombok.experimental.UtilityClass;
 
-/* I completely forgot that factorial can be calculated in parallel: https://habr.com/ru/articles/255761/  */
+/* https://habr.com/ru/articles/255761/  */
+@UtilityClass
 public class Task2 {
     public static BigInteger calculateFactorialInParallel(int n) {
         if (n < 0) {
@@ -19,8 +21,5 @@ public class Task2 {
             .mapToObj(BigInteger::valueOf)
             .reduce(BigInteger::multiply)
             .get();
-    }
-
-    private Task2() {
     }
 }

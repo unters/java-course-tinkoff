@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
+import lombok.experimental.UtilityClass;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import static java.lang.Math.pow;
 
 /* On my laptop (6 physical cores, 12 logical cores, 2.6ghz) it takes 3.1 seconds to approximate Pi using 12 threads
  * vs. 54.08 seconds using 1 thread (in both cases 1 million dots get "thrown").  */
+@UtilityClass
 public class Task4 {
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -95,9 +97,6 @@ public class Task4 {
         }
 
         return PI_DIVISOR * ((double) dotsInCircleCount / dotsTotalCount);
-    }
-
-    private Task4() {
     }
 
     private static class MonteCarloPiApproximationRunnable implements Runnable {

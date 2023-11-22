@@ -1,5 +1,8 @@
 package edu.hw7.task1;
 
+import lombok.Getter;
+
+@Getter
 public class Counter {
     public Counter(int value) {
         this.value = value;
@@ -11,10 +14,6 @@ public class Counter {
 
     public synchronized void decrement() {
         --value;
-    }
-
-    public int getValue() {
-        return value;
     }
 
     private int value;
