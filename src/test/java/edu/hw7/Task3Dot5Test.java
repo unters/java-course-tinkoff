@@ -2,16 +2,14 @@ package edu.hw7;
 
 import edu.hw7.task3.Person;
 import edu.hw7.task3.PersonDatabase;
-import edu.hw7.task3.PersonDatabaseImplementation;
+import edu.hw7.task3Dot5.PersonDatabaseImplementation;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.random.RandomGenerator;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class Task3Test {
+public class Task3Dot5Test {
     @Test
     void add_PersonWithAllFieldsNotNullGiven_PersonCanBeFoundByAnyOfItsFields() {
         // given
@@ -81,7 +79,7 @@ public class Task3Test {
 
     @Test
     void personDatabaseImplementation_MultipleThreadsPerformOperationsOnASingleDatabase_RaceConditionDoesNotOccur() {
-        PersonDatabase personDatabase = new PersonDatabaseImplementation();
+        PersonDatabase personDatabase = new edu.hw7.task3.PersonDatabaseImplementation();
 
         final int iterationsNumber = 1_000_000;
         Runnable addingRunnable = () -> {
