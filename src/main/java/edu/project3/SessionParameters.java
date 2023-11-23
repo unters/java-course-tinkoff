@@ -19,7 +19,8 @@ public record SessionParameters(String logsSource,
                                 LogsSourceType logsSourceType,
                                 Optional<LocalDateTime> from,
                                 Optional<LocalDateTime> to,
-                                LogsReportPrinter.FileFormat outputFileFormat) {
+                                LogsReportPrinter.FileFormat outputFileFormat,
+                                Path logReportFile) {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private static final String URL_REGEX = "";

@@ -43,9 +43,20 @@ public class Application {
             .desc("Path to log file.")
             .build()
         );
-        CLI_OPTIONS.addOption(null, "from", true, "From description");
-        CLI_OPTIONS.addOption(null, "to", true, "To description");
+        CLI_OPTIONS.addOption(
+            null,
+            "from",
+            true,
+            "ISO8601 date (and time) from which logs will be considered in the statistics."
+        );
+        CLI_OPTIONS.addOption(
+            null,
+            "to",
+            true,
+            "ISO8601 date (and time) until which logs will be considered in the statistics."
+        );
         CLI_OPTIONS.addOption(null, "format", true, "File format.");
+        CLI_OPTIONS.addOption(null, "saveto", true, "Path to file, where log statistics will be saved.");
     }
 
     @SuppressWarnings("ReturnCount")
@@ -70,12 +81,11 @@ public class Application {
         }
 
         try {
-            Path logsReportFile = getLogsReportPath(sessionParameters);
             LogsReportPrinter logsReportPrinter = switch (sessionParameters.outputFileFormat()) {
                 case MARKDOWN -> new MarkdownPrinter(logsReport, sessionParameters);
                 case ADOC -> new AdocPrinter(logsReport, sessionParameters);
             };
-            logsReportPrinter.print(logsReportFile);
+            logsReportPrinter.print(sessionParameters.logReportFile());
         } catch (IOException e) {
             System.out.println("Error printing log report: " + e.getMessage());
             return;
@@ -85,9 +95,10 @@ public class Application {
     private static SessionParameters resolveSessionParameters(String[] args) {
         String logsSource;
         LogsSourceType logsSourceType;
-        Optional<LocalDateTime> from = Optional.empty();
-        Optional<LocalDateTime> to = Optional.empty();
-        FileFormat outputFileFormat = FileFormat.MARKDOWN;
+        Optional<LocalDateTime> from;
+        Optional<LocalDateTime> to;
+        FileFormat outputFileFormat;
+        Path logReportFile;
         try {
             CommandLineParser parser = new DefaultParser();
             CommandLine cli = parser.parse(CLI_OPTIONS, args);
@@ -101,11 +112,15 @@ public class Application {
             if (cli.hasOption("from")) {
                 from = Optional.of(SessionParameters.resolveIso8601DateTime(cli.getOptionValue("from")));
                 LOGGER.info("Resolved from: " + from);
+            } else {
+                from = Optional.empty();
             }
 
             if (cli.hasOption("to")) {
                 to = Optional.of(SessionParameters.resolveIso8601DateTime(cli.getOptionValue("to")));
                 LOGGER.info("Resolved to: " + to);
+            } else {
+                to = Optional.empty();
             }
 
             if (cli.hasOption("format")) {
@@ -115,12 +130,22 @@ public class Application {
                 } catch (IllegalArgumentException e) {
                     throw new IllegalArgumentException("Unsupported file format: " + cli.getOptionValue("format"));
                 }
+            } else {
+                outputFileFormat = FileFormat.MARKDOWN;
+            }
+
+            if (cli.hasOption("saveto")) {
+                logReportFile = Paths.get(cli.getOptionValue("saveto"));
+            } else {
+                String logsReportFileName =
+                    "logs_report_" + LocalDate.now() + outputFileFormat.getExtension();
+                logReportFile =  Paths.get(System.getProperty("user.dir"), logsReportFileName);
             }
         } catch (ParseException e) {
             throw new IllegalArgumentException("Wrong usage: " + e.getMessage());
         }
 
-        return new SessionParameters(logsSource, logsSourceType, from, to, outputFileFormat);
+        return new SessionParameters(logsSource, logsSourceType, from, to, outputFileFormat, logReportFile);
     }
 
     private static Stream<LogRecord> readLogs(SessionParameters sessionParameters) throws IOException {
