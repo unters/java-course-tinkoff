@@ -1,5 +1,6 @@
 package edu.project3.logstats.printer;
 
+import edu.project3.SessionParameters;
 import edu.project3.logstats.LogsReport;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
-import edu.project3.SessionParameters;
 
 public abstract class LogsReportPrinter {
     public LogsReportPrinter(LogsReport logReport, SessionParameters sessionParameters) {

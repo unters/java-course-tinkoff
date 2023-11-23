@@ -1,8 +1,6 @@
 package edu.project3;
 
 import edu.project3.logstats.printer.LogsReportPrinter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,6 +12,8 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public record SessionParameters(String logsSource,
                                 LogsSourceType logsSourceType,
@@ -23,7 +23,8 @@ public record SessionParameters(String logsSource,
                                 Path logReportFile) {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final String URL_REGEX = "";
+    private static final String URL_REGEX = "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}"
+        + "\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)";
     private static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX);
 
     static LogsSourceType resolveLogsSourceType(String logsSource) {
@@ -49,19 +50,19 @@ public record SessionParameters(String logsSource,
             TemporalAccessor temporalAccessor =
                 DateTimeFormatter.ISO_DATE_TIME.parse(dateTime);
             localDateTime = LocalDateTime.from(temporalAccessor);
-                LOGGER.info("Resolved LocalDateTime: " + localDateTime);
         } catch (DateTimeException dateTimeException) {
             try {
                 TemporalAccessor temporalAccessor =
                     DateTimeFormatter.ISO_DATE.parse(dateTime);
                 LocalDate localDate = LocalDate.from(temporalAccessor);
                 localDateTime = localDate.atStartOfDay();
-                    LOGGER.info("Resolved LocalDateTime: " + localDateTime);
             } catch (DateTimeParseException dateTimeParseException) {
                 throw new IllegalArgumentException(
                     "Invalid date-time format option: " + dateTime);
             }
         }
+
+        LOGGER.info("Resolved LocalDateTime: " + localDateTime);
         return localDateTime;
     }
 

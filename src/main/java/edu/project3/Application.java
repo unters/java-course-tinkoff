@@ -5,7 +5,10 @@ import edu.project3.logstats.LogsReport;
 import edu.project3.logstats.printer.AdocPrinter;
 import edu.project3.logstats.printer.LogsReportPrinter;
 import edu.project3.logstats.printer.MarkdownPrinter;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -139,7 +142,7 @@ public class Application {
             } else {
                 String logsReportFileName =
                     "logs_report_" + LocalDate.now() + outputFileFormat.getExtension();
-                logReportFile =  Paths.get(System.getProperty("user.dir"), logsReportFileName);
+                logReportFile = Paths.get(System.getProperty("user.dir"), logsReportFileName);
             }
         } catch (ParseException e) {
             throw new IllegalArgumentException("Wrong usage: " + e.getMessage());
@@ -245,8 +248,9 @@ public class Application {
         return resultingLogRecordStream;
     }
 
-    private static Stream<LogRecord> readLogsUsingUrl(String url) {
-        return null;    // TODO.
+    private static Stream<LogRecord> readLogsUsingUrl(String urlString) throws IOException {
+        return (new BufferedReader(new InputStreamReader((new URL(urlString)).openStream()))).lines()
+            .map(LogRecord::new);
     }
 
     private static Path getLogsReportPath(SessionParameters sessionParameters) {
