@@ -12,7 +12,6 @@ import lombok.ToString;
 @ToString
 public class LogsReport {
     public LogsReport(Stream<LogRecord> logRecordStream) {
-        /* TODO: make improvements to calculate averageResponseSize correctly.  */
         logRecordStream.forEach(logRecord -> {
             ++requestsTotal;
             responseSizes.add(Double.parseDouble(logRecord.getBytesSent()));
@@ -26,11 +25,12 @@ public class LogsReport {
         for (double responseSize : responseSizes) {
             averageResponseSize += responseSize / requestsTotal;
         }
+        averageResponseSize = Math.round(averageResponseSize);
     }
 
     private long requestsTotal = 0;
     private double averageResponseSize = 0;
-    private List<Double> responseSizes = new ArrayList<>();
-    private Map<String, Long> requestsPerResource = new HashMap<>();
-    private Map<String, Long> statusCodesCount = new HashMap<>();
+    private final List<Double> responseSizes = new ArrayList<>();
+    private final Map<String, Long> requestsPerResource = new HashMap<>();
+    private final Map<String, Long> statusCodesCount = new HashMap<>();
 }

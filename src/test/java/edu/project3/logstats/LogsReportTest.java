@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class LogReportTest {
+public class LogsReportTest {
     private static final class LogRecordStreamArgumentsProvider implements ArgumentsProvider {
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
@@ -27,7 +27,7 @@ public class LogReportTest {
                             + "-\" \"Debian APT-HTTP/1.3 (1.0.1ubuntu2)\""
                     ).map(LogRecord::new),
                     3,
-                    437,
+                    437.0,
                     convertListToMap(List.of(
                         new AbstractMap.SimpleEntry<>("/downloads/product_1", 2L),
                         new AbstractMap.SimpleEntry<>("/downloads/product_2", 1L)
@@ -51,10 +51,10 @@ public class LogReportTest {
 
     @ParameterizedTest
     @ArgumentsSource(LogRecordStreamArgumentsProvider.class)
-    void update(
+    void new_LogStreamGiven_ReturnExpectedAnswer(
         Stream<LogRecord> logRecordStream,
         long expectedRequestsTotal,
-        long expectedAverageResponseSize,
+        double expectedAverageResponseSize,
         Map<String, Long> expectedRequestsPerResource,
         Map<String, Long> expectedStatusCodesCount
     ) {
