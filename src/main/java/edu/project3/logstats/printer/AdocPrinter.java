@@ -2,7 +2,8 @@ package edu.project3.logstats.printer;
 
 import edu.project3.logstats.LogsReport;
 import java.util.List;
-import static edu.project3.Application.SessionParameters;
+
+import edu.project3.SessionParameters;
 
 public class AdocPrinter extends LogsReportPrinter {
     public AdocPrinter(LogsReport logReport, SessionParameters sessionParameters) {

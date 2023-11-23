@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
-import static edu.project3.Application.SessionParameters;
+import edu.project3.SessionParameters;
 
 public abstract class LogsReportPrinter {
     public LogsReportPrinter(LogsReport logReport, SessionParameters sessionParameters) {

@@ -3,7 +3,8 @@ package edu.project3.logstats.printer;
 import edu.project3.logstats.LogsReport;
 import java.util.ArrayList;
 import java.util.List;
-import static edu.project3.Application.SessionParameters;
+
+import edu.project3.SessionParameters;
 
 public final class MarkdownPrinter extends LogsReportPrinter {
     private static final String VERTICAL_SEPARATOR = "|";

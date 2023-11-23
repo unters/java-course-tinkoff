@@ -9,15 +9,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.TemporalAccessor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -27,9 +26,11 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import static edu.project3.SessionParameters.LogsSourceType;
 import static edu.project3.logstats.printer.LogsReportPrinter.FileFormat;
 
 @SuppressWarnings({"MultipleStringLiterals", "RegexpSinglelineJava"})
+@UtilityClass
 public class Application {
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -51,7 +52,7 @@ public class Application {
     public static void run(String[] args) {
         SessionParameters sessionParameters;
         try {
-            sessionParameters = parseSessionParameters(args);
+            sessionParameters = resolveSessionParameters(args);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             HelpFormatter helpFormatter = new HelpFormatter();
@@ -70,7 +71,7 @@ public class Application {
 
         try {
             Path logsReportFile = getLogsReportPath(sessionParameters);
-            LogsReportPrinter logsReportPrinter = switch (sessionParameters.outputFileFormat) {
+            LogsReportPrinter logsReportPrinter = switch (sessionParameters.outputFileFormat()) {
                 case MARKDOWN -> new MarkdownPrinter(logsReport, sessionParameters);
                 case ADOC -> new AdocPrinter(logsReport, sessionParameters);
             };
@@ -81,66 +82,36 @@ public class Application {
         }
     }
 
-    private static SessionParameters parseSessionParameters(String[] args) {
-        String logsFile;
-        LogsSourceType resourceType;
+    private static SessionParameters resolveSessionParameters(String[] args) {
+        String logsSource;
+        LogsSourceType logsSourceType;
         Optional<LocalDateTime> from = Optional.empty();
         Optional<LocalDateTime> to = Optional.empty();
         FileFormat outputFileFormat = FileFormat.MARKDOWN;
         try {
             CommandLineParser parser = new DefaultParser();
             CommandLine cli = parser.parse(CLI_OPTIONS, args);
-            LOGGER.info(cli.getOptionValue("path"));
 
-            logsFile = cli.getOptionValue("path");
-            resourceType = resolveResourceType(logsFile);
-            if (resourceType == null) {
-                throw new IllegalArgumentException("Unknown source format: " + logsFile);
-            }
+            logsSource = cli.getOptionValue("path");
+            LOGGER.info("Resolved logsSource: " + cli.getOptionValue("path"));
+
+            logsSourceType = SessionParameters.resolveLogsSourceType(logsSource);
+            LOGGER.info("Resolved logsSourceType: " + logsSourceType);
 
             if (cli.hasOption("from")) {
-                try {
-                    TemporalAccessor temporalAccessor =
-                        DateTimeFormatter.ISO_DATE_TIME.parse(cli.getOptionValue("from"));
-                    from = Optional.of(LocalDateTime.from(temporalAccessor));
-                    LOGGER.info("from: " + from.get());
-                } catch (DateTimeException dateTimeException) {
-                    try {
-                        TemporalAccessor temporalAccessor =
-                            DateTimeFormatter.ISO_DATE.parse(cli.getOptionValue("from"));
-                        LocalDate localDate = LocalDate.from(temporalAccessor);
-                        from = Optional.of(localDate.atStartOfDay());
-                        LOGGER.info("from: " + from.get());
-                    } catch (DateTimeParseException dateTimeParseException) {
-                        throw new IllegalArgumentException(
-                            "Invalid date/time format for \"from\" option: " + cli.getOptionValue("from"));
-                    }
-                }
+                from = Optional.of(SessionParameters.resolveIso8601DateTime(cli.getOptionValue("from")));
+                LOGGER.info("Resolved from: " + from);
             }
 
             if (cli.hasOption("to")) {
-                try {
-                    TemporalAccessor temporalAccessor =
-                        DateTimeFormatter.ISO_DATE_TIME.parse(cli.getOptionValue("to"));
-                    to = Optional.of(LocalDateTime.from(temporalAccessor));
-                    LOGGER.info("to: " + to.get());
-                } catch (DateTimeParseException e) {
-                    try {
-                        TemporalAccessor temporalAccessor =
-                            DateTimeFormatter.ISO_DATE.parse(cli.getOptionValue("to"));
-                        LocalDate localDate = LocalDate.from(temporalAccessor);
-                        to = Optional.of(localDate.atStartOfDay());
-                        LOGGER.info("to: " + to.get());
-                    } catch (DateTimeParseException dateTimeParseException) {
-                        throw new IllegalArgumentException(
-                            "Invalid date/time format for \"to\" option: " + cli.getOptionValue("to"));
-                    }
-                }
+                to = Optional.of(SessionParameters.resolveIso8601DateTime(cli.getOptionValue("to")));
+                LOGGER.info("Resolved to: " + to);
             }
 
             if (cli.hasOption("format")) {
                 try {
                     outputFileFormat = FileFormat.valueOf(cli.getOptionValue("format").toUpperCase());
+                    LOGGER.info("Resolver outputFileFormat: " + outputFileFormat);
                 } catch (IllegalArgumentException e) {
                     throw new IllegalArgumentException("Unsupported file format: " + cli.getOptionValue("format"));
                 }
@@ -149,22 +120,25 @@ public class Application {
             throw new IllegalArgumentException("Wrong usage: " + e.getMessage());
         }
 
-        return new SessionParameters(logsFile, resourceType, from, to, outputFileFormat);
-    }
-
-    private static LogsSourceType resolveResourceType(String resource) {
-        if (LogsSourceType.LINUX_RELATIVE_PATH.pattern.matcher(resource).matches()) {
-            return LogsSourceType.LINUX_RELATIVE_PATH;
-        } else if (LogsSourceType.URL.pattern.matcher(resource).matches()) {
-            return LogsSourceType.URL;  // Not supported yet.
-        }
-        return null;
+        return new SessionParameters(logsSource, logsSourceType, from, to, outputFileFormat);
     }
 
     private static Stream<LogRecord> readLogs(SessionParameters sessionParameters) throws IOException {
-        Stream<LogRecord> logRecordStream = switch (sessionParameters.logsSourceType) {
-            case LINUX_RELATIVE_PATH -> readLogsFromLocalFile(Paths.get(sessionParameters.logsSource));
-            case URL -> readLogsUsingUrl(); // Not supported yet.
+        Stream<LogRecord> logRecordStream = switch (sessionParameters.logsSourceType()) {
+            case FILE -> {
+                Path logsFilePath = Paths.get(sessionParameters.logsSource());
+                if (!logsFilePath.isAbsolute()) {
+                    logsFilePath = Paths.get(System.getProperty("user.dir"), logsFilePath.toString());
+                }
+
+                yield readLogsFromFile(logsFilePath);
+            }
+
+            case WILDCARD -> {
+                List<Path> logsFiles = resolveWildcardFilePaths(sessionParameters.logsSource());
+                yield readLogsFromFiles(logsFiles);
+            }
+            case URL -> readLogsUsingUrl(sessionParameters.logsSource());
         };
 
         if (sessionParameters.from().isPresent()) {
@@ -184,46 +158,75 @@ public class Application {
         return logRecordStream;
     }
 
-    private static Stream<LogRecord> readLogsFromLocalFile(Path logsFile) throws IOException {
+    /* Works for linux paths only. Should I add methods to make it easier to add support for other operational
+     * systems?  */
+    private static List<Path> resolveWildcardFilePaths(String logsFilesWildcard) throws IOException {
+        int starIndex = logsFilesWildcard.indexOf('*');
+        int questionMarkIndex = logsFilesWildcard.indexOf('?');
+        int openingBracketIndex = logsFilesWildcard.indexOf('[');
+        int minIndexOfSpecialCharacter = Integer.MAX_VALUE;
+        if (starIndex != -1) {
+            minIndexOfSpecialCharacter = Math.min(minIndexOfSpecialCharacter, starIndex);
+        }
+        if (questionMarkIndex != -1) {
+            minIndexOfSpecialCharacter = Math.min(minIndexOfSpecialCharacter, questionMarkIndex);
+        }
+        if (openingBracketIndex != -1) {
+            minIndexOfSpecialCharacter = Math.min(minIndexOfSpecialCharacter, openingBracketIndex);
+        }
+
+        int slashIndex =
+            logsFilesWildcard.substring(0, Math.min(logsFilesWildcard.length(), minIndexOfSpecialCharacter))
+                .lastIndexOf('/');
+        Path directory;
+        String pattern;
+        if (slashIndex == -1) {
+            directory = Paths.get(System.getProperty("user.dir"));
+            pattern = logsFilesWildcard;
+        } else {
+            pattern = logsFilesWildcard.substring(slashIndex + 1);
+            directory = Paths.get(logsFilesWildcard.substring(0, slashIndex));
+            if (!directory.isAbsolute()) {
+                directory = Paths.get(System.getProperty("user.dir"), directory.toString());
+            }
+        }
+
+        WildcardPathFinder wildcardPathFinder = new WildcardPathFinder(pattern);
+        Files.walkFileTree(directory, wildcardPathFinder);
+        List<Path> logsFiles = wildcardPathFinder.done();
+        for (int i = 0; i < logsFiles.size(); ++i) {
+            logsFiles.set(i, directory.resolve(logsFiles.get(i)));
+        }
+        LOGGER.info("Matching files found: " + Arrays.toString(logsFiles.toArray()));
+        return logsFiles;
+    }
+
+    private static Stream<LogRecord> readLogsFromFile(Path logsFile) throws IOException {
         return Files.lines(logsFile).map(LogRecord::new);
     }
 
-    private static Stream<LogRecord> readLogsUsingUrl() {
+    private static Stream<LogRecord> readLogsFromFiles(List<Path> logsFiles) throws IOException {
+        List<Stream<LogRecord>> logRecordStreams = new ArrayList<>();
+        for (Path logsFile : logsFiles) {
+            Stream<LogRecord> logRecordStream = Files.lines((logsFile)).map(LogRecord::new);
+            logRecordStreams.add(logRecordStream);
+        }
+
+        Stream<LogRecord> resultingLogRecordStream = logRecordStreams.get(0);
+        for (int i = 1; i < logRecordStreams.size(); ++i) {
+            resultingLogRecordStream = Stream.concat(resultingLogRecordStream, logRecordStreams.get(i));
+        }
+
+        return resultingLogRecordStream;
+    }
+
+    private static Stream<LogRecord> readLogsUsingUrl(String url) {
         return null;    // TODO.
     }
 
     private static Path getLogsReportPath(SessionParameters sessionParameters) {
         String logsReportFileName =
             "logs_report_" + LocalDate.now() + sessionParameters.outputFileFormat().getExtension();
-        return switch (sessionParameters.logsSourceType) {
-            case LINUX_RELATIVE_PATH -> {
-                Path parentDirectory = Paths.get(sessionParameters.logsSource).getParent();
-                yield Paths.get(parentDirectory.toString(), logsReportFileName);
-            }
-            case URL -> null;   // TODO.
-        };
-    }
-
-    private Application() {
-    }
-
-    public record SessionParameters(String logsSource,
-                                    LogsSourceType logsSourceType,
-                                    Optional<LocalDateTime> from,
-                                    Optional<LocalDateTime> to,
-                                    FileFormat outputFileFormat) {
-    }
-
-    private enum LogsSourceType {
-        LINUX_RELATIVE_PATH("^(.+)\\/([^\\/]+)$"),
-        URL("");    // TODO.
-
-        LogsSourceType(String regex) {
-            this.regex = regex;
-            pattern = Pattern.compile(this.regex);
-        }
-
-        private final String regex;
-        public final Pattern pattern;
+        return Paths.get(System.getProperty("user.dir"), logsReportFileName);
     }
 }
