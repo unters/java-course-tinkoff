@@ -59,8 +59,7 @@ public class LogReportTest {
         Map<String, Long> expectedStatusCodesCount
     ) {
         // when
-        LogsReport logsReport = new LogsReport();
-        logsReport.update(logRecordStream);
+        LogsReport logsReport = new LogsReport(logRecordStream);
         logRecordStream.close();
 
         // then

@@ -36,7 +36,7 @@ public abstract class LogsReportPrinter {
             new String[] {"From", sessionParameters.from().isPresent() ? sessionParameters.from().toString() : "-"},
             new String[] {"To", sessionParameters.to().isPresent() ? sessionParameters.to().toString() : "-"},
             new String[] {"Requests", Long.toString(logReport.getRequestsTotal())},
-            new String[] {"Average response size", Long.toString(logReport.getAverageResponseSize())}
+            new String[] {"Average response size", Double.toString(logReport.getAverageResponseSize())}
         )));
 
         contents.add(createHeader("Requested resources"));

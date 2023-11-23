@@ -74,10 +74,9 @@ public class Application {
             return;
         }
 
-        LogsReport logsReport = new LogsReport();
+        LogsReport logsReport;
         try (Stream<LogRecord> logRecordStream = readLogs(sessionParameters)) {
-            logsReport.update(logRecordStream);
-            LOGGER.info(logsReport);
+            logsReport = new LogsReport(logRecordStream);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return;
