@@ -65,8 +65,9 @@ public abstract class LogsReportPrinter {
             new String[] {"File", sessionParameters.logsSource()},
             new String[] {"From", sessionParameters.from().isPresent() ? sessionParameters.from().toString() : "-"},
             new String[] {"To", sessionParameters.to().isPresent() ? sessionParameters.to().toString() : "-"},
-            new String[] {"Requests", Long.toString(logReport.getRequestsTotal())},
-            new String[] {"Average response size", Double.toString(logReport.getAverageResponseSize())}
+            new String[] {"Requests count", Long.toString(logReport.getRequestsTotal())},
+            new String[] {"Average response size", Long.toString(logReport.getAverageResponseSize()) + "b"},
+            new String[] {"Clients count", Long.toString(logReport.getClients().size())}
         )));
 
         contents.add(createHeader("Requested resources"));

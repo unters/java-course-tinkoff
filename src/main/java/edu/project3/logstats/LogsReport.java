@@ -2,8 +2,10 @@ package edu.project3.logstats;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.ToString;
@@ -20,17 +22,20 @@ public class LogsReport {
                 logRecord.getStatusCode(),
                 statusCodesCount.getOrDefault(logRecord.getStatusCode(), 0L) + 1
             );
+            clients.add(logRecord.getIpAddress());
         });
 
+        double averageResponseSizeDouble = 0;
         for (double responseSize : responseSizes) {
-            averageResponseSize += responseSize / requestsTotal;
+            averageResponseSizeDouble += responseSize / requestsTotal;
         }
-        averageResponseSize = Math.round(averageResponseSize);
+        averageResponseSize = (long) averageResponseSizeDouble;
     }
 
     private long requestsTotal = 0;
-    private double averageResponseSize = 0;
+    private long averageResponseSize = 0;
     private final List<Double> responseSizes = new ArrayList<>();
     private final Map<String, Long> requestsPerResource = new HashMap<>();
     private final Map<String, Long> statusCodesCount = new HashMap<>();
+    private final Set<String> clients = new HashSet<>();
 }

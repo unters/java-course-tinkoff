@@ -27,7 +27,7 @@ public class LogsReportTest {
                             + "-\" \"Debian APT-HTTP/1.3 (1.0.1ubuntu2)\""
                     ).map(LogRecord::new),
                     3,
-                    437.0,
+                    437,
                     convertListToMap(List.of(
                         new AbstractMap.SimpleEntry<>("/downloads/product_1", 2L),
                         new AbstractMap.SimpleEntry<>("/downloads/product_2", 1L)
@@ -54,7 +54,7 @@ public class LogsReportTest {
     void new_LogStreamGiven_ReturnExpectedAnswer(
         Stream<LogRecord> logRecordStream,
         long expectedRequestsTotal,
-        double expectedAverageResponseSize,
+        long expectedAverageResponseSize,
         Map<String, Long> expectedRequestsPerResource,
         Map<String, Long> expectedStatusCodesCount
     ) {
