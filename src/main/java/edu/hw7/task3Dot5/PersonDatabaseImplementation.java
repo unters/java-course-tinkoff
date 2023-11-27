@@ -158,7 +158,7 @@ public class PersonDatabaseImplementation implements PersonDatabase {
         return person.name() != null && person.address() != null && person.phoneNumber() != null;
     }
 
-    private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+    private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
 
     private final Map<Integer, Person> persons = new HashMap<>();
     private final Map<String, Set<Person>> nameToPersonsMap = new HashMap<>();
