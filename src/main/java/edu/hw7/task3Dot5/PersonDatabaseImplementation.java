@@ -19,9 +19,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class PersonDatabaseImplementation implements PersonDatabase {
     @Override
     public final void add(Person person) {
+        readWriteLock.writeLock().lock();
         try {
-            readWriteLock.writeLock().lock();
-
             if (persons.containsKey(person.id())) {
                 this.delete(person.id());
             }
@@ -64,9 +63,8 @@ public class PersonDatabaseImplementation implements PersonDatabase {
 
     @Override
     public final void delete(int id) {
+        readWriteLock.writeLock().lock();
         try {
-            readWriteLock.writeLock().lock();
-
             Person person = persons.get(id);
             if (person == null) {
                 return;
@@ -92,9 +90,8 @@ public class PersonDatabaseImplementation implements PersonDatabase {
 
     @Override
     public final List<Person> findByName(String name) {
+        readWriteLock.readLock().lock();
         try {
-            readWriteLock.readLock().lock();
-
             Set<Person> personSet = nameToPersonsMap.get(name);
             if (personSet == null || personSet.isEmpty()) {
                 return List.of();
@@ -115,9 +112,8 @@ public class PersonDatabaseImplementation implements PersonDatabase {
 
     @Override
     public final List<Person> findByAddress(String address) {
+        readWriteLock.readLock().lock();
         try {
-            readWriteLock.readLock().lock();
-
             Set<Person> personSet = addressToPersonsMap.get(address);
             if (personSet == null || personSet.isEmpty()) {
                 return List.of();
@@ -138,9 +134,8 @@ public class PersonDatabaseImplementation implements PersonDatabase {
 
     @Override
     public final List<Person> findByPhone(String phoneNumber) {
+        readWriteLock.readLock().lock();
         try {
-            readWriteLock.readLock().lock();
-
             Set<Person> personSet = phoneNumberToPersonsMap.get(phoneNumber);
             if (personSet == null || personSet.isEmpty()) {
                 return List.of();
