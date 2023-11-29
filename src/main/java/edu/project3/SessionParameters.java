@@ -12,6 +12,11 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,11 +28,43 @@ public record SessionParameters(String logsSource,
                                 Path logReportFile) {
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private static final Options CLI_OPTIONS = CliOptions.getOptions();
+
     private static final String URL_REGEX = "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}"
         + "\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)";
     private static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX);
 
-    static LogsSourceType resolveLogsSourceType(String logsSource) {
+    @SuppressWarnings("MultipleStringLiterals")
+    static SessionParameters resolveSessionParameters(String[] args) {
+        try {
+            CommandLineParser parser = new DefaultParser();
+            CommandLine cli = parser.parse(CLI_OPTIONS, args);
+
+            String logsSource = cli.getOptionValue("path");
+            LogsSourceType logsSourceType = resolveLogsSourceType(logsSource);
+            Optional<LocalDateTime> from = cli.hasOption("from")
+                ? Optional.of(resolveIso8601DateTime(cli.getOptionValue("from")))
+                : Optional.empty();
+            Optional<LocalDateTime> to = cli.hasOption("to")
+                ? Optional.of(resolveIso8601DateTime(cli.getOptionValue("to")))
+                : Optional.empty();
+            LogsReportPrinter.FileFormat outputFileFormat = cli.hasOption("format")
+                ? LogsReportPrinter.FileFormat.valueOf(cli.getOptionValue("format").toUpperCase())
+                : LogsReportPrinter.FileFormat.MARKDOWN;
+            Path logReportFile = cli.hasOption("saveto")
+                ? Paths.get(cli.getOptionValue("saveto"))
+                : createLogsReportFilePath(outputFileFormat);
+            return new SessionParameters(logsSource, logsSourceType, from, to, outputFileFormat, logReportFile);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Wrong usage: " + e.getMessage());
+        } catch (InvalidPathException e) {
+            throw new IllegalArgumentException("invalid path to save logs to");
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("illegal file format", e);
+        }
+    }
+
+    private static LogsSourceType resolveLogsSourceType(String logsSource) {
         if (logsSource.contains("*") || logsSource.contains("[") || logsSource.contains("?")) {
             return LogsSourceType.WILDCARD;
         } else if (URL_PATTERN.matcher(logsSource).matches()) {
@@ -43,8 +80,13 @@ public record SessionParameters(String logsSource,
         }
     }
 
+    private static Path createLogsReportFilePath(LogsReportPrinter.FileFormat fileFormat) {
+        String logsReportFileName = "logs_report_" + LocalDate.now() + fileFormat.getExtension();
+        return Paths.get(System.getProperty("user.dir"), logsReportFileName);
+    }
+
     /* Probably, I should have used regular expressions instead of try-catch circus.  */
-    static LocalDateTime resolveIso8601DateTime(String dateTime) {
+    private static LocalDateTime resolveIso8601DateTime(String dateTime) {
         LocalDateTime localDateTime;
         try {
             TemporalAccessor temporalAccessor =

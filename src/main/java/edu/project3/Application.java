@@ -17,31 +17,27 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.experimental.UtilityClass;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import static edu.project3.SessionParameters.LogsSourceType;
-import static edu.project3.logstats.printer.LogsReportPrinter.FileFormat;
 
-@SuppressWarnings({"MultipleStringLiterals", "RegexpSinglelineJava"})
+@SuppressWarnings("RegexpSinglelineJava")
 @UtilityClass
 public class Application {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Options CLI_OPTIONS = CliOptions.getOptions();
 
+    private static final String CURRENT_DIR_SYSTEM_PROPERTY = "user.dir";
+
     @SuppressWarnings("ReturnCount")
     public static void run(String[] args) {
         SessionParameters sessionParameters;
         try {
-            sessionParameters = resolveSessionParameters(args);
+            sessionParameters = SessionParameters.resolveSessionParameters(args);
+            LOGGER.info(sessionParameters);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             HelpFormatter helpFormatter = new HelpFormatter();
@@ -69,68 +65,12 @@ public class Application {
         }
     }
 
-    private static SessionParameters resolveSessionParameters(String[] args) {
-        String logsSource;
-        LogsSourceType logsSourceType;
-        Optional<LocalDateTime> from;
-        Optional<LocalDateTime> to;
-        FileFormat outputFileFormat;
-        Path logReportFile;
-        try {
-            CommandLineParser parser = new DefaultParser();
-            CommandLine cli = parser.parse(CLI_OPTIONS, args);
-
-            logsSource = cli.getOptionValue("path");
-            LOGGER.info("Resolved logsSource: " + cli.getOptionValue("path"));
-
-            logsSourceType = SessionParameters.resolveLogsSourceType(logsSource);
-            LOGGER.info("Resolved logsSourceType: " + logsSourceType);
-
-            if (cli.hasOption("from")) {
-                from = Optional.of(SessionParameters.resolveIso8601DateTime(cli.getOptionValue("from")));
-                LOGGER.info("Resolved from: " + from);
-            } else {
-                from = Optional.empty();
-            }
-
-            if (cli.hasOption("to")) {
-                to = Optional.of(SessionParameters.resolveIso8601DateTime(cli.getOptionValue("to")));
-                LOGGER.info("Resolved to: " + to);
-            } else {
-                to = Optional.empty();
-            }
-
-            if (cli.hasOption("format")) {
-                try {
-                    outputFileFormat = FileFormat.valueOf(cli.getOptionValue("format").toUpperCase());
-                    LOGGER.info("Resolver outputFileFormat: " + outputFileFormat);
-                } catch (IllegalArgumentException e) {
-                    throw new IllegalArgumentException("Unsupported file format: " + cli.getOptionValue("format"));
-                }
-            } else {
-                outputFileFormat = FileFormat.MARKDOWN;
-            }
-
-            if (cli.hasOption("saveto")) {
-                logReportFile = Paths.get(cli.getOptionValue("saveto"));
-            } else {
-                String logsReportFileName =
-                    "logs_report_" + LocalDate.now() + outputFileFormat.getExtension();
-                logReportFile = Paths.get(System.getProperty("user.dir"), logsReportFileName);
-            }
-        } catch (ParseException e) {
-            throw new IllegalArgumentException("Wrong usage: " + e.getMessage());
-        }
-
-        return new SessionParameters(logsSource, logsSourceType, from, to, outputFileFormat, logReportFile);
-    }
-
     private static Stream<LogRecord> readLogs(SessionParameters sessionParameters) throws IOException {
         Stream<LogRecord> logRecordStream = switch (sessionParameters.logsSourceType()) {
             case FILE -> {
                 Path logsFilePath = Paths.get(sessionParameters.logsSource());
                 if (!logsFilePath.isAbsolute()) {
-                    logsFilePath = Paths.get(System.getProperty("user.dir"), logsFilePath.toString());
+                    logsFilePath = Paths.get(System.getProperty(CURRENT_DIR_SYSTEM_PROPERTY), logsFilePath.toString());
                 }
 
                 yield readLogsFromFile(logsFilePath);
@@ -183,13 +123,13 @@ public class Application {
         Path directory;
         String pattern;
         if (slashIndex == -1) {
-            directory = Paths.get(System.getProperty("user.dir"));
+            directory = Paths.get(System.getProperty(CURRENT_DIR_SYSTEM_PROPERTY));
             pattern = logsFilesWildcard;
         } else {
             pattern = logsFilesWildcard.substring(slashIndex + 1);
             directory = Paths.get(logsFilesWildcard.substring(0, slashIndex));
             if (!directory.isAbsolute()) {
-                directory = Paths.get(System.getProperty("user.dir"), directory.toString());
+                directory = Paths.get(System.getProperty(CURRENT_DIR_SYSTEM_PROPERTY), directory.toString());
             }
         }
 
@@ -230,6 +170,6 @@ public class Application {
     private static Path getLogsReportPath(SessionParameters sessionParameters) {
         String logsReportFileName =
             "logs_report_" + LocalDate.now() + sessionParameters.outputFileFormat().getExtension();
-        return Paths.get(System.getProperty("user.dir"), logsReportFileName);
+        return Paths.get(System.getProperty(CURRENT_DIR_SYSTEM_PROPERTY), logsReportFileName);
     }
 }
