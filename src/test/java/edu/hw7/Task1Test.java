@@ -12,14 +12,22 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Task1Test {
-    private static class InvalidArgumentsProvider implements ArgumentsProvider {
+    private static class InvalidCounterArgumentsProvider implements ArgumentsProvider {
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
+            return Stream.of(
+                Arguments.of(null, 20),
+                Arguments.of(null, -1)
+            );
+        }
+    }
+
+    private static class InvalidIntArgumentsProvider implements ArgumentsProvider {
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
             return Stream.of(
                 Arguments.of(new Counter(0), 0),
-                Arguments.of(new Counter(0), -15),
-                Arguments.of(null, 20),
-                Arguments.of(null, -1)
+                Arguments.of(new Counter(0), -15)
             );
         }
     }
@@ -36,8 +44,16 @@ public class Task1Test {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(InvalidArgumentsProvider.class)
+    @ArgumentsSource(InvalidCounterArgumentsProvider.class)
     void executeProcedure_InvalidArgumentGiven_IllegalArgumentExceptionIsThrown(Counter counter, int t) {
+        assertThrows(NullPointerException.class, () -> {
+            executeProcedure(counter, t);
+        });
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(InvalidIntArgumentsProvider.class)
+    void executeProcedure_InvalidIntGiven_IllegalArgumentExceptionIsThrown(Counter counter, int t) {
         assertThrows(IllegalArgumentException.class, () -> {
             executeProcedure(counter, t);
         });
