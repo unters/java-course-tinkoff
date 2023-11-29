@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
@@ -48,9 +49,6 @@ public class Application {
         LogsReport logsReport;
         try (Stream<LogRecord> logRecordStream = readLogs(sessionParameters)) {
             logsReport = new LogsReport(logRecordStream);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            return;
         }
 
         try {
@@ -65,7 +63,8 @@ public class Application {
         }
     }
 
-    private static Stream<LogRecord> readLogs(SessionParameters sessionParameters) throws IOException {
+    @SneakyThrows
+    private static Stream<LogRecord> readLogs(SessionParameters sessionParameters) {
         Stream<LogRecord> logRecordStream = switch (sessionParameters.logsSourceType()) {
             case FILE -> {
                 Path logsFilePath = Paths.get(sessionParameters.logsSource());
@@ -102,7 +101,8 @@ public class Application {
 
     /* Works for linux paths only. Should I add methods to make it easier to add support for other operational
      * systems?  */
-    private static List<Path> resolveWildcardFilePaths(String logsFilesWildcard) throws IOException {
+    @SneakyThrows
+    private static List<Path> resolveWildcardFilePaths(String logsFilesWildcard) {
         int starIndex = logsFilesWildcard.indexOf('*');
         int questionMarkIndex = logsFilesWildcard.indexOf('?');
         int openingBracketIndex = logsFilesWildcard.indexOf('[');
@@ -143,11 +143,13 @@ public class Application {
         return logsFiles;
     }
 
-    private static Stream<LogRecord> readLogsFromFile(Path logsFile) throws IOException {
+    @SneakyThrows
+    private static Stream<LogRecord> readLogsFromFile(Path logsFile) {
         return Files.lines(logsFile).map(LogRecord::new);
     }
 
-    private static Stream<LogRecord> readLogsFromFiles(List<Path> logsFiles) throws IOException {
+    @SneakyThrows
+    private static Stream<LogRecord> readLogsFromFiles(List<Path> logsFiles) {
         List<Stream<LogRecord>> logRecordStreams = new ArrayList<>();
         for (Path logsFile : logsFiles) {
             Stream<LogRecord> logRecordStream = Files.lines((logsFile)).map(LogRecord::new);
@@ -162,7 +164,8 @@ public class Application {
         return resultingLogRecordStream;
     }
 
-    private static Stream<LogRecord> readLogsUsingUrl(String urlString) throws IOException {
+    @SneakyThrows
+    private static Stream<LogRecord> readLogsUsingUrl(String urlString) {
         return (new BufferedReader(new InputStreamReader((new URL(urlString)).openStream()))).lines()
             .map(LogRecord::new);
     }

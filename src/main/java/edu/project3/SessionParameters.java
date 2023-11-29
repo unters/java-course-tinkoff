@@ -17,8 +17,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public record SessionParameters(String logsSource,
                                 LogsSourceType logsSourceType,
@@ -26,8 +24,6 @@ public record SessionParameters(String logsSource,
                                 Optional<LocalDateTime> to,
                                 LogsReportPrinter.FileFormat outputFileFormat,
                                 Path logReportFile) {
-    private static final Logger LOGGER = LogManager.getLogger();
-
     private static final Options CLI_OPTIONS = CliOptions.getOptions();
 
     private static final String URL_REGEX = "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}"
@@ -104,7 +100,6 @@ public record SessionParameters(String logsSource,
             }
         }
 
-        LOGGER.info("Resolved LocalDateTime: " + localDateTime);
         return localDateTime;
     }
 

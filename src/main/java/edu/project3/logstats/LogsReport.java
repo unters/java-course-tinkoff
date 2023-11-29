@@ -13,6 +13,14 @@ import lombok.ToString;
 @Getter
 @ToString
 public class LogsReport {
+    private long requestsTotal = 0;
+    private long averageResponseSize = 0;
+
+    private final List<Double> responseSizes = new ArrayList<>();
+    private final Map<String, Long> requestsPerResource = new HashMap<>();
+    private final Map<String, Long> statusCodesCount = new HashMap<>();
+    private final Set<String> clients = new HashSet<>();
+
     public LogsReport(Stream<LogRecord> logRecordStream) {
         logRecordStream.forEach(logRecord -> {
             ++requestsTotal;
@@ -31,11 +39,4 @@ public class LogsReport {
         }
         averageResponseSize = (long) averageResponseSizeDouble;
     }
-
-    private long requestsTotal = 0;
-    private long averageResponseSize = 0;
-    private final List<Double> responseSizes = new ArrayList<>();
-    private final Map<String, Long> requestsPerResource = new HashMap<>();
-    private final Map<String, Long> statusCodesCount = new HashMap<>();
-    private final Set<String> clients = new HashSet<>();
 }
