@@ -13,6 +13,11 @@ import java.util.Set;
  * by one of its fields even if some data about this person is missing. Therefore, in current database implementation
  * the person is added in all the maps/sets/lists even if it has some fields equal to null.  */
 public class PersonDatabaseImplementation implements PersonDatabase {
+    private final Map<Integer, Person> persons = new HashMap<>();
+    private final Map<String, Set<Person>> nameToPersonsMap = new HashMap<>();
+    private final Map<String, Set<Person>> addressToPersonsMap = new HashMap<>();
+    private final Map<String, Set<Person>> phoneNumberToPersonsMap = new HashMap<>();
+
     @Override
     public final synchronized void add(Person person) {
         if (persons.containsKey(person.id())) {
@@ -128,9 +133,4 @@ public class PersonDatabaseImplementation implements PersonDatabase {
     private boolean personIsValid(Person person) {
         return person.name() != null && person.address() != null && person.phoneNumber() != null;
     }
-
-    private final Map<Integer, Person> persons = new HashMap<>();
-    private final Map<String, Set<Person>> nameToPersonsMap = new HashMap<>();
-    private final Map<String, Set<Person>> addressToPersonsMap = new HashMap<>();
-    private final Map<String, Set<Person>> phoneNumberToPersonsMap = new HashMap<>();
 }

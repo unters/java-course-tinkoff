@@ -1,6 +1,7 @@
 package edu.hw7;
 
 import edu.hw7.task1.Counter;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,11 +16,7 @@ public class Task1 {
      * @param counter Counter to execute the procedure on.
      * @param t Number of times the procedure will be executed.
      */
-    public static void executeProcedure(Counter counter, int t) {
-        if (counter == null) {
-            throw new IllegalArgumentException("counter cannot be null");
-        }
-
+    public static void executeProcedure(@NonNull Counter counter, int t) {
         if (t <= 0) {
             throw new IllegalArgumentException("t must be positive");
         }
@@ -42,7 +39,7 @@ public class Task1 {
             incrementingThread.join();
             decrementingThread.join();
         } catch (InterruptedException e) {
-            LOGGER.info(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 }
