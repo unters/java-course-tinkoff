@@ -5,26 +5,32 @@ import java.util.Iterator;
 import java.util.Map;
 import lombok.NonNull;
 
-public final class PasswordIterator implements Iterator<String> {
+public class RangedPasswordIterator implements Iterator<String> {
     private static final String DEFAULT_ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyz";
 
     private final int passwordLength;
     private final String alphabet;
-    private final String initialPassword;
+    private final String firstPassword;
+    private final String lastPassword;
     private final Map<Character, Integer> characterIndices = new HashMap<>();
 
     private boolean noPasswordsLeft = false;
     private StringBuilder nextPassword;
 
-    public PasswordIterator(int passwordLength) {
-        this(DEFAULT_ALPHABET, passwordLength);
+    public static String getDefaultAlphabet() {
+        return DEFAULT_ALPHABET;
     }
 
-    public PasswordIterator(@NonNull String alphabet, int passwordLength) {
-        if (passwordLength <= 0) {
-            throw new IllegalArgumentException("passwordLength must be positive");
+    public RangedPasswordIterator(String password1, String password2) {
+        this(DEFAULT_ALPHABET, password1, password2);
+    }
+
+    public RangedPasswordIterator(@NonNull String alphabet, @NonNull String password1, @NonNull String password2) {
+        if (password1.length() != password2.length()) {
+            throw new IllegalArgumentException("password1 and password2 lengths must match");
         }
 
+        this.alphabet = alphabet;
         for (int i = 0; i < alphabet.length(); ++i) {
             char c = alphabet.charAt(i);
             if (characterIndices.containsKey(c)) {
@@ -33,10 +39,22 @@ public final class PasswordIterator implements Iterator<String> {
             characterIndices.put(c, i);
         }
 
-        this.alphabet = alphabet;
-        this.passwordLength = passwordLength;
-        initialPassword = String.valueOf(alphabet.charAt(0)).repeat(passwordLength);
-        nextPassword = new StringBuilder(initialPassword);
+        for (char c : password1.toCharArray()) {
+            if (!characterIndices.containsKey(c)) {
+                throw new IllegalArgumentException("password1 contains characters that don't belong to given alphabet");
+            }
+        }
+
+        for (char c : password2.toCharArray()) {
+            if (!characterIndices.containsKey(c)) {
+                throw new IllegalArgumentException("password2 contains characters that don't belong to given alphabet");
+            }
+        }
+
+        this.passwordLength = password1.length();
+        firstPassword = password1;
+        lastPassword = password2;
+        nextPassword = new StringBuilder(firstPassword);
     }
 
     @Override
@@ -51,13 +69,9 @@ public final class PasswordIterator implements Iterator<String> {
         return passwordToReturn;
     }
 
-    public String getDefaultAlphabet() {
-        return DEFAULT_ALPHABET;
-    }
-
     private void generateNextPassword() {
         incrementCharAt(passwordLength - 1);
-        if (nextPassword.toString().equals(initialPassword)) {
+        if (nextPassword.toString().equals(lastPassword)) {
             noPasswordsLeft = true;
         }
     }
