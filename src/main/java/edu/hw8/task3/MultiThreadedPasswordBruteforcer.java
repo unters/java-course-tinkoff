@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +39,7 @@ public class MultiThreadedPasswordBruteforcer {
     }
 
     @SneakyThrows({ExecutionException.class, InterruptedException.class})
-    public static List<String> bruteforce(@NotNull String passwordHash, int expectedLength) {
+    public static List<String> bruteforce(@NonNull String passwordHash, int expectedLength) {
         if (expectedLength <= 0) {
             throw new IllegalArgumentException("expectedLength must be positive");
         }

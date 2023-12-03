@@ -33,7 +33,7 @@ public class MultiThreadedBruteforcerTest {
     @ParameterizedTest
     @ValueSource(ints = {-1, 0, 1})
     void bruteforceExpectedLength_NullPasswordHashsGiven_ThrowIllegalArgumentsException(int expectedLength) {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(NullPointerException.class, () -> {
             MultiThreadedPasswordBruteforcer.bruteforce(null, expectedLength);
         });
     }
