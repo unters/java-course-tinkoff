@@ -12,7 +12,7 @@ public class SingleThreadedPasswordBruteforcerTest {
     @ParameterizedTest
     @CsvSource({"-1, 1", "0, 1", "1, 1", "10, -10"})
     void bruteforceMinMaxLengths_NullPasswordHashsGiven_ThrowIllegalArgumentsException(int minLength, int maxLength) {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(NullPointerException.class, () -> {
             SingleThreadedPasswordBruteforcer.bruteforce(null, minLength, maxLength);
         });
     }
@@ -32,8 +32,8 @@ public class SingleThreadedPasswordBruteforcerTest {
 
     @ParameterizedTest
     @ValueSource(ints = {-1, 0, 1})
-    void bruteforceExpectedLength_NullPasswordHashsGiven_ThrowIllegalArgumentsException(int expectedLength) {
-        assertThrows(IllegalArgumentException.class, () -> {
+    void bruteforceExpectedLength_NullPasswordHashGiven_ThrowIllegalArgumentsException(int expectedLength) {
+        assertThrows(NullPointerException.class, () -> {
             SingleThreadedPasswordBruteforcer.bruteforce(null, expectedLength);
         });
     }

@@ -5,9 +5,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
-import org.jetbrains.annotations.NotNull;
 
 @UtilityClass
 public class SingleThreadedPasswordBruteforcer {
@@ -15,7 +15,7 @@ public class SingleThreadedPasswordBruteforcer {
     private static final int HASH_LENGTH = 32;
     private static final String HASHING_ALGORITHM = "MD5";
 
-    public static List<String> bruteforce(@NotNull String passwordHash, int minLength, int maxLength) {
+    public static List<String> bruteforce(@NonNull String passwordHash, int minLength, int maxLength) {
         if (minLength <= 0) {
             throw new IllegalArgumentException("minLength must be positive");
         }
@@ -32,7 +32,7 @@ public class SingleThreadedPasswordBruteforcer {
     }
 
     @SneakyThrows(NoSuchAlgorithmException.class)
-    public static List<String> bruteforce(@NotNull String passwordHash, int expectedLength) {
+    public static List<String> bruteforce(@NonNull String passwordHash, int expectedLength) {
         if (expectedLength <= 0) {
             throw new IllegalArgumentException("expectedLength must be positive");
         }
