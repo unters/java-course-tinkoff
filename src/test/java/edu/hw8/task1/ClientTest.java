@@ -2,6 +2,7 @@ package edu.hw8.task1;
 
 import edu.hw8.task1.toxicclient.Client;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -21,7 +22,7 @@ public class ClientTest {
             return Stream.of(
                 Arguments.of(null, null),
                 Arguments.of(null, new PrintStream(new ByteArrayOutputStream())),
-                Arguments.of(new BufferedInputStream(System.in), null)
+                Arguments.of(new ByteArrayInputStream("exit".getBytes()), null)
             );
         }
     }
@@ -30,7 +31,7 @@ public class ClientTest {
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
             return Stream.of(
-                Arguments.of(new BufferedInputStream(System.in), new PrintStream((new ByteArrayOutputStream())))
+                Arguments.of(new ByteArrayInputStream("exit".getBytes()), new PrintStream((new ByteArrayOutputStream())))
             );
         }
     }
