@@ -21,11 +21,23 @@ public class Server {
     private static final int N_THREADS = 3;
     private static final int MAX_CONNECTIONS = 3;
 
-    private final Semaphore semaphore = new Semaphore(MAX_CONNECTIONS);
+    private final int nThreads;
+    private final int maxConnections;
+    private final Semaphore semaphore;
+
+    public Server() {
+        this(N_THREADS, MAX_CONNECTIONS);
+    }
+
+    public Server(int nThreads, int maxConnections) {
+        this.nThreads = nThreads;
+        this.maxConnections = maxConnections;
+        semaphore = new Semaphore(nThreads);
+    }
 
     public void start() {
         try (Selector selector = Selector.open();
-             ExecutorService executorService = Executors.newFixedThreadPool(N_THREADS)) {
+             ExecutorService executorService = Executors.newFixedThreadPool(nThreads)) {
             ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
             serverSocketChannel.configureBlocking(false);
             serverSocketChannel.socket().bind(new InetSocketAddress(HOST, PORT));
