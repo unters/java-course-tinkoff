@@ -30,6 +30,14 @@ public class Server {
     }
 
     public Server(int nThreads, int maxConnections) {
+        if (nThreads <= 0) {
+            throw new IllegalArgumentException("nThreads must be positive");
+        }
+
+        if (maxConnections <= 0) {
+            throw new IllegalArgumentException("maxConnections must be positive");
+        }
+
         this.nThreads = nThreads;
         this.maxConnections = maxConnections;
         semaphore = new Semaphore(nThreads);

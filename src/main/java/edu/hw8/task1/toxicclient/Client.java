@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.Scanner;
+import lombok.NonNull;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,7 +22,7 @@ public class Client {
     private final InputStream is;
     private final PrintStream ps;
 
-    public Client(InputStream is, PrintStream os) {
+    public Client(@NonNull InputStream is, @NonNull PrintStream os) {
         this.is = is;
         this.ps = os;
     }
