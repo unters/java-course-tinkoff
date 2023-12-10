@@ -9,6 +9,7 @@ public class Pixel {
 
     private int counter;
     private Rgb color;
+    private double normal;
 
     public Pixel() {
         counter = 0;

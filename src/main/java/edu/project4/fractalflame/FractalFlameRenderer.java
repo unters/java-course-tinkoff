@@ -39,7 +39,8 @@ public class FractalFlameRenderer extends JFrame {
     }
 
     public void saveToFile() {
-        Path path = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "edu", "project4");
+        Path path =
+            Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "edu", "project4", "flame.png");
         try {
             ImageIO.write(bufferedImage, "png", new File(path.toString()));
         } catch (IOException e) {

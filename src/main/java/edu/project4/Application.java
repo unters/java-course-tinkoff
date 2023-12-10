@@ -7,9 +7,9 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Application {
 
-    private static final int DEFAULT_X_RESOLUTION = 1240;
-    private static final int DEFAULT_Y_RESOLUTION = 720;
-    private static final int DEFAULT_N_SAMPLES = 3;
+    private static final int DEFAULT_X_RESOLUTION = 1920;
+    private static final int DEFAULT_Y_RESOLUTION = 1080;
+    private static final int DEFAULT_N_SAMPLES = 1;
     private static final int DEFAULT_N_THREADS = 6;
 
     public static void run(String[] args) {

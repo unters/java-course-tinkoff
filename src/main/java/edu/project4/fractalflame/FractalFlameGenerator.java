@@ -1,5 +1,6 @@
 package edu.project4.fractalflame;
 
+import edu.project4.functions.DiskTransformation;
 import edu.project4.functions.HeartTransformation;
 import edu.project4.functions.PolarTransformation;
 import edu.project4.functions.SineTransformation;
@@ -8,6 +9,7 @@ import edu.project4.functions.Transformation;
 import edu.project4.utils.AffineTransformation;
 import edu.project4.utils.Coordinates;
 import edu.project4.utils.Pixel;
+import edu.project4.utils.Rgb;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
@@ -36,8 +38,9 @@ public class FractalFlameGenerator {
     private final double xMin;
     private final double xMax;
 
-    private final int affineTransformationsCount = 10;       // TODO.
-    private final int iterationsPerSample = 10_000_000;      // TODO.
+    private final int affineTransformationsCount = 10;  // TODO.
+    private final int iterationsPerSample = 10_000_000; // TODO.
+    private final double gamma = 0.8;                   // TODO.
 
     public FractalFlameGenerator(int yResolution, int xResolution, int nSamples, int nThreads) {
         this.yResolution = yResolution;
@@ -63,7 +66,25 @@ public class FractalFlameGenerator {
     public synchronized void generate() {
         List<CompletableFuture> completableFutures = new ArrayList<>();
         for (int i = 0; i < nSamples; ++i) {
-            completableFutures.add(CompletableFuture.runAsync(new Worker(), executorService));
+            completableFutures.add(CompletableFuture.runAsync(new GeneratingWorker(), executorService));
+        }
+
+        for (var completableFuture : completableFutures) {
+            completableFuture.join();
+        }
+
+        completableFutures.clear();
+        int stripeHeight = yResolution / nThreads;
+        double maxNormal = calculateMaxNormal();
+        for (int i = 0; i < nThreads; ++i) {
+            completableFutures.add(CompletableFuture.runAsync(
+                new CorrectionWorker(
+                    i * stripeHeight,
+                    (i + 1 == nThreads) ? yResolution : (i + 1) * stripeHeight,
+                    maxNormal
+                ),
+                executorService
+            ));
         }
 
         for (var completableFuture : completableFutures) {
@@ -75,17 +96,33 @@ public class FractalFlameGenerator {
         return canvas;
     }
 
-    private final class Worker implements Runnable {
+    private double calculateMaxNormal() {
+        double maxNormal = 0;
+        for (int y = 0; y < yResolution; ++y) {
+            for (int x = 0; x < xResolution; ++x) {
+                Pixel pixel = canvas[y][x];
+                if (pixel.getCounter() != 0) {
+                    pixel.setNormal(Math.log10(pixel.getCounter()));
+                    maxNormal = Math.max(maxNormal, pixel.getNormal());
+                }
+            }
+        }
+
+        return maxNormal;
+    }
+
+    private final class GeneratingWorker implements Runnable {
 
         @Override
         public void run() {
             int hitsOnCanvas = 0;   // DEBUG.
 
             List<Transformation> transformationsList = List.of(
-                new SineTransformation(),
-                new SphericalTransformation(),
-                new PolarTransformation(),
+//                new SineTransformation(),
+//                new SphericalTransformation(),
+//                new PolarTransformation(),
                 new HeartTransformation()
+//                new DiskTransformation()
             );
 
             double y = ThreadLocalRandom.current().nextDouble(yMin, yMax);
@@ -121,9 +158,12 @@ public class FractalFlameGenerator {
                         ++hitsOnCanvas;
                         Pixel pixel = canvas[yCanvas][xCanvas];
                         synchronized (pixel) {
+                            Rgb atColor = affineTransformation.color();
                             if (pixel.getCounter() == 0) {
-                                pixel.setColor(affineTransformation.color());
+                                Rgb color = new Rgb(atColor.getR(), atColor.getG(), atColor.getB());
+                                pixel.setColor(color);
                             } else {
+                                pixel.getColor().apply(atColor);
 //                                Rgb aftColor = affineTransformation.color();
 //                                Rgb oldColor = pixel.getColor();
 //                                Rgb newColor = pixel.getColor();
@@ -138,6 +178,36 @@ public class FractalFlameGenerator {
                 }
             }
             LOGGER.debug("Painting on canvas (%d): ".formatted(hitsOnCanvas) + transformation.getClass().getName());
+        }
+    }
+
+    private final class CorrectionWorker implements Runnable {
+
+        private final int yTop;
+        private final int yBottom;
+        private final double maxNormal;
+
+        CorrectionWorker(int yTop, int yBottom, double maxNormal) {
+            this.yTop = yTop;
+            this.yBottom = yBottom;
+            this.maxNormal = maxNormal;
+        }
+
+        @Override
+        public void run() {
+            for (int y = yTop; y < yBottom; ++y) {
+                for (int x = 0; x < xResolution; ++x) {
+                    Pixel pixel = canvas[y][x];
+                    pixel.setNormal(pixel.getNormal() / maxNormal);
+
+                    Rgb correctedColor = new Rgb(
+                        (int) (pixel.getColor().getR() * Math.pow(pixel.getNormal(), 1.0 / gamma)),
+                        (int) (pixel.getColor().getG() * Math.pow(pixel.getNormal(), 1.0 / gamma)),
+                        (int) (pixel.getColor().getB() * Math.pow(pixel.getNormal(), 1.0 / gamma))
+                    );
+                    pixel.setColor(correctedColor);
+                }
+            }
         }
     }
 }
