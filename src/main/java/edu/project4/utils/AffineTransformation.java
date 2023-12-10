@@ -4,6 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public record AffineTransformation(double a, double b, double c, double d, double e, double f, Rgb color) {
 
+    @SuppressWarnings({"MultipleVariableDeclarations", "MagicNumber"})
     public static AffineTransformation generate() {
         double a, b, c, d, e, f;
         ThreadLocalRandom threadLocalRandom = ThreadLocalRandom.current();

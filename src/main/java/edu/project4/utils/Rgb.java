@@ -26,6 +26,7 @@ public class Rgb {
         b = (b + rgb.getB()) / 2;
     }
 
+    @SuppressWarnings("MagicNumber")
     public int getRgb() {
         return (r << 16 | g << 8 | b);
     }

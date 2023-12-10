@@ -10,8 +10,6 @@ import edu.project4.utils.AffineTransformation;
 import edu.project4.utils.Coordinates;
 import edu.project4.utils.Pixel;
 import edu.project4.utils.Rgb;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -20,6 +18,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FractalFlameGenerator {
 
@@ -31,7 +31,7 @@ public class FractalFlameGenerator {
     private final int nThreads;
 
     private final Pixel[][] canvas;
-    private final ExecutorService executorService;
+    private ExecutorService executorService;
 
     private final double yMin;
     private final double yMax;
@@ -54,7 +54,6 @@ public class FractalFlameGenerator {
                 canvas[y][x] = new Pixel();
             }
         }
-        this.executorService = Executors.newFixedThreadPool(nThreads);
 
         double ratio = (double) xResolution / yResolution;
         yMin = -1;
@@ -64,6 +63,7 @@ public class FractalFlameGenerator {
     }
 
     public synchronized void generate() {
+        this.executorService = Executors.newFixedThreadPool(nThreads);
         List<CompletableFuture> completableFutures = new ArrayList<>();
         for (int i = 0; i < nSamples; ++i) {
             completableFutures.add(CompletableFuture.runAsync(new GeneratingWorker(), executorService));
@@ -90,6 +90,8 @@ public class FractalFlameGenerator {
         for (var completableFuture : completableFutures) {
             completableFuture.join();
         }
+
+        executorService.shutdown();
     }
 
     public synchronized Pixel[][] getCanvas() {
@@ -114,15 +116,14 @@ public class FractalFlameGenerator {
     private final class GeneratingWorker implements Runnable {
 
         @Override
+        @SuppressWarnings("MagicNumber")
         public void run() {
-            int hitsOnCanvas = 0;   // DEBUG.
-
             List<Transformation> transformationsList = List.of(
-//                new SineTransformation(),
-//                new SphericalTransformation(),
-//                new PolarTransformation(),
-                new HeartTransformation()
-//                new DiskTransformation()
+                new SineTransformation(),
+                new SphericalTransformation(),
+                new PolarTransformation(),
+                new HeartTransformation(),
+                new DiskTransformation()
             );
 
             double y = ThreadLocalRandom.current().nextDouble(yMin, yMax);
@@ -131,7 +132,7 @@ public class FractalFlameGenerator {
                 .limit(affineTransformationsCount)
                 .collect(Collectors.toList());
 
-            /* Looking for starting point - nothing is drawn yet.  */
+            /* Generating starting point - nothing is drawn yet.  */
             for (int i = 0; i < 20; ++i) {
                 AffineTransformation affineTransformation =
                     affineTransformations.get(ThreadLocalRandom.current().nextInt(affineTransformations.size()));
@@ -155,7 +156,6 @@ public class FractalFlameGenerator {
                     int yCanvas = (int) (((yMax - y) / (yMax - yMin)) * yResolution);
                     int xCanvas = (int) (((xMax - x) / (xMax - xMin)) * xResolution);
                     if (yCanvas >= 0 && yCanvas < yResolution && xCanvas >= 0 && xCanvas < xResolution) {
-                        ++hitsOnCanvas;
                         Pixel pixel = canvas[yCanvas][xCanvas];
                         synchronized (pixel) {
                             Rgb atColor = affineTransformation.color();
@@ -164,20 +164,12 @@ public class FractalFlameGenerator {
                                 pixel.setColor(color);
                             } else {
                                 pixel.getColor().apply(atColor);
-//                                Rgb aftColor = affineTransformation.color();
-//                                Rgb oldColor = pixel.getColor();
-//                                Rgb newColor = pixel.getColor();
-//                                newColor.setR((oldColor.getR() + aftColor.getR()) / 2);
-//                                newColor.setG((oldColor.getG() + aftColor.getG()) / 2);
-//                                newColor.setB((oldColor.getB() + aftColor.getB()) / 2);
-//                                pixel.setColor(newColor);
                             }
                             pixel.incrementCounter();
                         }
                     }
                 }
             }
-            LOGGER.debug("Painting on canvas (%d): ".formatted(hitsOnCanvas) + transformation.getClass().getName());
         }
     }
 
