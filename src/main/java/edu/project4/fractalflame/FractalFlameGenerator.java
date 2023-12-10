@@ -38,9 +38,9 @@ public class FractalFlameGenerator {
     private final double xMin;
     private final double xMax;
 
-    private final int affineTransformationsCount = 10;  // TODO.
+    private final int affineTransformationsCount = 50;  // TODO.
     private final int iterationsPerSample = 10_000_000; // TODO.
-    private final double gamma = 0.8;                   // TODO.
+    private final double gamma = 0.65;                  // TODO.
 
     public FractalFlameGenerator(int yResolution, int xResolution, int nSamples, int nThreads) {
         this.yResolution = yResolution;
@@ -64,6 +64,7 @@ public class FractalFlameGenerator {
 
     public synchronized void generate() {
         this.executorService = Executors.newFixedThreadPool(nThreads);
+        LOGGER.debug("Generating flame.");
         List<CompletableFuture> completableFutures = new ArrayList<>();
         for (int i = 0; i < nSamples; ++i) {
             completableFutures.add(CompletableFuture.runAsync(new GeneratingWorker(), executorService));
@@ -73,6 +74,7 @@ public class FractalFlameGenerator {
             completableFuture.join();
         }
 
+        LOGGER.debug("Processing image (gamma-correction).");
         completableFutures.clear();
         int stripeHeight = yResolution / nThreads;
         double maxNormal = calculateMaxNormal();
