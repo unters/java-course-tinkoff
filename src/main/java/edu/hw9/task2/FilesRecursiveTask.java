@@ -1,6 +1,5 @@
 package edu.hw9.task2;
 
-import lombok.SneakyThrows;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -9,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.RecursiveTask;
 import java.util.function.Predicate;
+import lombok.SneakyThrows;
 
 public class FilesRecursiveTask extends RecursiveTask<List<Path>> {
     private final Path dir;

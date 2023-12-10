@@ -1,11 +1,13 @@
 package edu.hw9.task2;
 
-import lombok.NonNull;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Predicate;
+import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class RecursiveTreeWalker {
     private static final ForkJoinPool FORK_JOIN_POOL = ForkJoinPool.commonPool();
 
