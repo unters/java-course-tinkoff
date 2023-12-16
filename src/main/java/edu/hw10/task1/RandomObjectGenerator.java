@@ -3,6 +3,7 @@ package edu.hw10.task1;
 import edu.hw10.task1.generators.BooleanGenerator;
 import edu.hw10.task1.generators.Generator;
 import edu.hw10.task1.generators.IntGenerator;
+import edu.hw10.task1.generators.StringGenerator;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -10,12 +11,13 @@ import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-import edu.hw10.task1.generators.StringGenerator;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class RandomObjectGenerator {
-    private static Map<Class, Generator> GENERATORS = new HashMap<>();
+    private static final Map<Class, Generator> GENERATORS = new HashMap<>();
 
     static {
         GENERATORS.put(int.class, new IntGenerator());

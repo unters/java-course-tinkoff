@@ -1,6 +1,5 @@
 package edu.hw10.task2;
 
-import java.io.File;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -13,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import lombok.SneakyThrows;
-import lombok.experimental.UtilityClass;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

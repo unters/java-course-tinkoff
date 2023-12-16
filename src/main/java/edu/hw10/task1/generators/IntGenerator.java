@@ -11,11 +11,11 @@ public class IntGenerator implements Generator {
         int minValue = Integer.MIN_VALUE;
         int maxValue = Integer.MAX_VALUE;
         for (var annotation : annotations) {
-            if (annotation instanceof Min minAnno && minAnno.value() >= Integer.MIN_VALUE &&
-                minAnno.value() <= Integer.MAX_VALUE && minAnno.value() <= maxValue) {
+            if (annotation instanceof Min minAnno && minAnno.value() >= Integer.MIN_VALUE
+                && minAnno.value() <= Integer.MAX_VALUE && minAnno.value() <= maxValue) {
                 minValue = (int) minAnno.value();
-            } else if (annotation instanceof Max maxAnno && maxAnno.value() >= Integer.MIN_VALUE &&
-                maxAnno.value() <= Integer.MAX_VALUE && maxAnno.value() >= minValue) {
+            } else if (annotation instanceof Max maxAnno && maxAnno.value() >= Integer.MIN_VALUE
+                && maxAnno.value() <= Integer.MAX_VALUE && maxAnno.value() >= minValue) {
                 maxValue = (int) maxAnno.value();
             }
         }

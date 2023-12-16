@@ -10,8 +10,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Task1Test {
-    private static final int DEMO_CLASS_VALUE_MIN = 0;
-    private static final int DEMO_CLASS_VALUE_MAX = 10;
+    private static final int DEMO_CLASS_VALUE_MIN = 10;
+    private static final int DEMO_CLASS_VALUE_MAX = 20;
 
     @Getter
     public static class DemoClass {
