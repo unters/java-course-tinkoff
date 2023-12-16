@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class BooleanGenerator implements Generator {
     @Override
-    public Object generate() {
+    public Object generate(Annotation[] annotations) {
         return ThreadLocalRandom.current().nextBoolean();
     }
 }

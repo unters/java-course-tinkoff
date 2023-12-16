@@ -10,6 +10,7 @@ import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import edu.hw10.task1.generators.StringGenerator;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 
@@ -19,6 +20,7 @@ public class RandomObjectGenerator {
     static {
         GENERATORS.put(int.class, new IntGenerator());
         GENERATORS.put(boolean.class, new BooleanGenerator());
+        GENERATORS.put(String.class, new StringGenerator());
     }
 
     @SneakyThrows
@@ -45,13 +47,14 @@ public class RandomObjectGenerator {
             }
         }
 
-        throw new NoSuchMethodException(clazz.getName() + " doesn't have method with name" + fabricMethod);
+        throw new NoSuchMethodException("Class " + clazz.getName() + " doesn't have method with name" + fabricMethod);
     }
 
     private static Object[] initializeArguments(Parameter[] parameters) {
         Object[] arguments = new Object[parameters.length];
         for (int i = 0; i < parameters.length; ++i) {
-            arguments[i] = GENERATORS.get(parameters[i].getType()).generate();
+            Generator generator = GENERATORS.get(parameters[i].getType());
+            arguments[i] = (generator == null) ? null : generator.generate(parameters[i].getAnnotations());
         }
         return arguments;
     }
