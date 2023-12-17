@@ -22,12 +22,14 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
 
 @State(Scope.Thread)
+@SuppressWarnings("MultipleStringLiterals")
 public class ReflectionBenchmark {
     private Student student;
     private Method method;
     private MethodHandle methodHandle;
     private Function<Student, String> lambdaFunction;
 
+    @SuppressWarnings({"UncommentedMain", "MagicNumber"})
     public static void main(String[] args) throws RunnerException {
         Options options = new OptionsBuilder()
             .include(ReflectionBenchmark.class.getSimpleName())
