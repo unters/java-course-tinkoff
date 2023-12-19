@@ -1,8 +1,5 @@
-package edu.hw8;
+package edu.hw8.task2;
 
-import edu.hw8.task2.FixedThreadPool;
-import edu.hw8.task2.RunnableFuture;
-import edu.hw8.task2.ThreadPool;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;

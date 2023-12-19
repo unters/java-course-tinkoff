@@ -1,7 +1,5 @@
-package edu.hw8;
+package edu.hw8.task3;
 
-import edu.hw8.task3.MultiThreadedPasswordBruteforcer;
-import edu.hw8.task3.SingleThreadedPasswordBruteforcer;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

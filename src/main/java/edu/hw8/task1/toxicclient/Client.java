@@ -29,8 +29,6 @@ public class Client {
 
     @SuppressWarnings("RegexpSingleLineJava")
     public void run() {
-//        try (SocketChannel client = SocketChannel.open(new InetSocketAddress(HOST, PORT));
-//             Scanner scanner = new Scanner(is);) {
         SocketChannel client = null;
         try (Scanner scanner = new Scanner(is)) {
             while (client == null) {
